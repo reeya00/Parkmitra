@@ -1,6 +1,27 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'login_screen.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<http.Response> createUser(
+    String username, String password, String email) {
+  final response = http.post(
+    // Uri.parse('http://127.0.0.1:8000/user/register/'), //use this for web
+    // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
+    Uri.http("localhost:8000", "/user/register/"),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'username': username,
+      'password': password,
+      'email': email,
+    }),
+  );
+  return response;
+}
 
 TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -15,6 +36,9 @@ class SigninScreen extends StatefulWidget {
 class _LoginScreenState extends State<SigninScreen> {
   late String username;
   late String password;
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +49,7 @@ class _LoginScreenState extends State<SigninScreen> {
         }
         return null;
       },
+      controller: usernameController,
       onSaved: (String? val) {
         username = val!;
       },
@@ -42,6 +67,7 @@ class _LoginScreenState extends State<SigninScreen> {
         }
         return null;
       },
+      controller: emailController,
       onChanged: (val) {
         setState(() {
           username = val;
@@ -61,6 +87,7 @@ class _LoginScreenState extends State<SigninScreen> {
         }
         return null;
       },
+      controller: passwordController,
       onChanged: (val) {
         setState(() {
           password = val;
@@ -82,16 +109,17 @@ class _LoginScreenState extends State<SigninScreen> {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             if (_formkey.currentState!.validate()) {
-              return;
+              createUser(usernameController.text, passwordController.text,
+                  emailController.text);
             }
             _formkey.currentState!.save();
             // print(username);
-            Navigator.push(context,
-               MaterialPageRoute(builder: (context) => LoginScreen()));
+            // Navigator.push(context,
+            // MaterialPageRoute(builder: (context) => LoginScreen()));
           },
           padding: const EdgeInsets.all(20),
           child:
-              const Text('Sign in', style: TextStyle(color: Color(0xffCCE9F2))),
+              const Text('Sign Up', style: TextStyle(color: Color(0xffCCE9F2))),
         ));
     return Scaffold(
       body: Center(
