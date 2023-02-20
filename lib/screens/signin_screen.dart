@@ -1,22 +1,41 @@
+<<<<<<< HEAD
+=======
+import 'dart:math';
+
+>>>>>>> 1b9d9a7cf6c8641b55d004c3eb8377cb25c58be0
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+<<<<<<< HEAD
 Future<http.Response> createUser(String username, String password, String email) async {
   http.Response response = await http.post(
     Uri.parse('http://127.0.0.1:8000/user/register/'),
+=======
+Future<http.Response> createUser(
+    String username, String password, String email) {
+  final response = http.post(
+    // Uri.parse('http://127.0.0.1:8000/user/register/'), //use this for web
+    // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
+    Uri.http("localhost:8000", "/user/register/"),
+>>>>>>> 1b9d9a7cf6c8641b55d004c3eb8377cb25c58be0
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, String>{
       'username': username,
       'password': password,
+<<<<<<< HEAD
       'email': email
+=======
+      'email': email,
+>>>>>>> 1b9d9a7cf6c8641b55d004c3eb8377cb25c58be0
     }),
   );
   return response;
 }
+<<<<<<< HEAD
 
 void signUp(String username, String password, String email) async {
   final response = await createUser(username, password, email);
@@ -26,6 +45,8 @@ void signUp(String username, String password, String email) async {
     // Error creating user, handle the error
   }
 }
+=======
+>>>>>>> 1b9d9a7cf6c8641b55d004c3eb8377cb25c58be0
 
 TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -40,9 +61,15 @@ class SigninScreen extends StatefulWidget {
 class _LoginScreenState extends State<SigninScreen> {
   late String username;
   late String password;
+<<<<<<< HEAD
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+=======
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+>>>>>>> 1b9d9a7cf6c8641b55d004c3eb8377cb25c58be0
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +81,7 @@ class _LoginScreenState extends State<SigninScreen> {
         }
         return null;
       },
+      controller: usernameController,
       onSaved: (String? val) {
         username = val!;
       },
@@ -72,6 +100,7 @@ class _LoginScreenState extends State<SigninScreen> {
         }
         return null;
       },
+      controller: emailController,
       onChanged: (val) {
         setState(() {
           username = val;
@@ -92,6 +121,7 @@ class _LoginScreenState extends State<SigninScreen> {
         }
         return null;
       },
+      controller: passwordController,
       onChanged: (val) {
         setState(() {
           password = val;
@@ -113,14 +143,23 @@ class _LoginScreenState extends State<SigninScreen> {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             if (_formkey.currentState!.validate()) {
+<<<<<<< HEAD
               signUp(_usernameController.text, _passwordController.text, _emailController.text);
               return;
+=======
+              createUser(usernameController.text, passwordController.text,
+                  emailController.text);
+>>>>>>> 1b9d9a7cf6c8641b55d004c3eb8377cb25c58be0
             }
             // _formkey.currentState!.save();
 
             // print(username);
             // Navigator.push(context,
+<<<<<<< HEAD
             //     MaterialPageRoute(builder: (context) => LoginScreen()));
+=======
+            // MaterialPageRoute(builder: (context) => LoginScreen()));
+>>>>>>> 1b9d9a7cf6c8641b55d004c3eb8377cb25c58be0
           },
           padding: const EdgeInsets.all(20),
           child:
