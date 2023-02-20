@@ -1,6 +1,31 @@
 import 'package:flutter/material.dart';
-
 import 'login_screen.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<http.Response> createUser(String username, String password, String email) async {
+  http.Response response = await http.post(
+    Uri.parse('http://127.0.0.1:8000/user/register/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'username': username,
+      'password': password,
+      'email': email
+    }),
+  );
+  return response;
+}
+
+void signUp(String username, String password, String email) async {
+  final response = await createUser(username, password, email);
+  if (response.statusCode == 201) {
+    // User created successfully, do something
+  } else {
+    // Error creating user, handle the error
+  }
+}
 
 TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -15,10 +40,14 @@ class SigninScreen extends StatefulWidget {
 class _LoginScreenState extends State<SigninScreen> {
   late String username;
   late String password;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final usernameField = TextFormField(
+      controller: _usernameController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Username is required";
@@ -36,6 +65,7 @@ class _LoginScreenState extends State<SigninScreen> {
     );
 
     final emailField = TextFormField(
+      controller: _emailController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Email is required";
@@ -55,6 +85,7 @@ class _LoginScreenState extends State<SigninScreen> {
     );
 
     final passwordField = TextFormField(
+      controller: _passwordController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Password is required";
@@ -82,16 +113,18 @@ class _LoginScreenState extends State<SigninScreen> {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             if (_formkey.currentState!.validate()) {
+              signUp(_usernameController.text, _passwordController.text, _emailController.text);
               return;
             }
-            _formkey.currentState!.save();
+            // _formkey.currentState!.save();
+
             // print(username);
-            Navigator.push(context,
-               MaterialPageRoute(builder: (context) => LoginScreen()));
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => LoginScreen()));
           },
           padding: const EdgeInsets.all(20),
           child:
-              const Text('Sign in', style: TextStyle(color: Color(0xffCCE9F2))),
+              const Text('Sign Up', style: TextStyle(color: Color(0xffCCE9F2))),
         ));
     return Scaffold(
       body: Center(
@@ -122,3 +155,12 @@ class _LoginScreenState extends State<SigninScreen> {
     );
   }
 }
+
+// create a Map object with user data
+Map<String, dynamic> userData = {
+  'username': 'john_doe',
+  'email': 'john.doe@example.com',
+  'password': 'password123'
+};
+
+String jsonUserData = jsonEncode(userData);
