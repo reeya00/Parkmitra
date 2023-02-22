@@ -21,8 +21,8 @@ class _MapOsmState extends State<MapOsm> {
     super.initState();
     getCurrentLocation();
     print(_currentPosition);
+  }
 
-  } 
   Widget build(BuildContext context) {
     // ignore: unnecessary_new
     return new Scaffold(
@@ -41,27 +41,30 @@ class _MapOsmState extends State<MapOsm> {
                   width: 80,
                   height: 80,
                   builder: (context) => Container(
-                    child: IconButton(
-                    icon: Icon(AppIcons.asset_8, size: 35, color: Colors.blueAccent,),
-                    color: Colors.red,
+                      child: IconButton(
+                    icon: Icon(
+                      AppIcons.asset_8,
+                      size: 35,
+                      color: Colors.blueAccent,
+                    ),
+                    // color: Colors.red,
                     iconSize: 40,
                     onPressed: () => {
+                      print("hello"),
                       getCurrentLocation,
                     },
                   )),
                 ),
                 Marker(
-                  point: LatLng(_currentPosition?.latitude ??0, _currentPosition?.longitude ??0),
-                  width: 80,
-                  height: 80,
-                  builder: (context) => Container(
-                      child: IconButton(
-                    icon: Icon(Icons.location_on),
-                    color: Colors.red,
-                    iconSize: 40,
-                    onPressed: () => {print('Marker Tapped')},
-                  )),
-                )
+                    point: LatLng(_currentPosition?.latitude ?? 0,
+                        _currentPosition?.longitude ?? 0),
+                    width: 80,
+                    height: 80,
+                    builder: (context) => GestureDetector(
+                          child: const Icon(Icons.location_on),
+                          // color: Colors.red,
+                          onTap: () => {print('Marker Tapped')},
+                        )),
               ],
             ),
 

@@ -104,18 +104,20 @@ class _LoginScreenState extends State<LoginScreen> {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
               // if (_formkey.currentState!.validate()) {
-              // loginUser(usernameController.text, passwordController.text,);
-              // _formkey.currentState!.save();
-
-            // }
-
-            // loginUser(usernameController.text,passwordController.text,);
-            //ignore: avoid_print
-            // print(loggedin);
-            // if(loggedin = true){
+            //   loginUser(usernameController.text, passwordController.text,);
+            //   _formkey.currentState!.save();
             //   Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => NavBar()));
+
             // }
+
+            loginUser(usernameController.text,passwordController.text,);
+            // ignore: avoid_print
+            print(loggedin);
+            if(loggedin = true){
+              Navigator.push(
+                context, MaterialPageRoute(builder: (context) => NavBar()));
+            }
           },
           padding: const EdgeInsets.all(20),
           child:
