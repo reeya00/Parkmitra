@@ -1,16 +1,17 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> createUser(
-    String username, String password, String email) {
-  final response = http.post(
-    // Uri.parse('http://127.0.0.1:8000/user/register/'), //use this for web
+    String username, String password, String email) async {
+  final response = await http.post(
+    Uri.parse('http://127.0.0.1:8000/user/register/'), //use this for web
     // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
-    Uri.http("localhost:8000", "/user/register/"),
+    // Uri.http("localhost:8000", "/user/register/"),
+    // Uri.parse('http://192.168.0.1:8000/user/register/'), 
+
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -109,14 +110,14 @@ class _LoginScreenState extends State<SigninScreen> {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             if (_formkey.currentState!.validate()) {
-              createUser(usernameController.text, passwordController.text,
-                  emailController.text);
-            }
-            // _formkey.currentState!.save();
+              createUser(usernameController.text, passwordController.text,emailController.text);
+               _formkey.currentState!.save();
 
             // print(username);
-            // Navigator.push(context,
-            // MaterialPageRoute(builder: (context) => LoginScreen()));
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context) => LoginScreen()));
+          }
+    
           },
           padding: const EdgeInsets.all(20),
           child:

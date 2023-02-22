@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:parkmitra/screens/current_location.dart';
 import 'package:parkmitra/screens/osmtry.dart';
 // import 'package:myapp/screens/login_screen.dart';
 
@@ -17,7 +18,7 @@ class HomeScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
 
       ),
-      body:MapOsm(),
+      body:LocationPage(),
     );
   }
 }

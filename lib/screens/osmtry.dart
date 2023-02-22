@@ -20,6 +20,8 @@ class _MapOsmState extends State<MapOsm> {
   void initState() {
     super.initState();
     getCurrentLocation();
+    print(_currentPosition);
+
   } 
   Widget build(BuildContext context) {
     // ignore: unnecessary_new
@@ -39,7 +41,7 @@ class _MapOsmState extends State<MapOsm> {
                   width: 80,
                   height: 80,
                   builder: (context) => Container(
-                      child: IconButton(
+                    child: IconButton(
                     icon: Icon(AppIcons.asset_8, size: 35, color: Colors.blueAccent,),
                     color: Colors.red,
                     iconSize: 40,
