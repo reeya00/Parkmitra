@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:parkmitra/screens/active_screen.dart';
+import 'package:parkmitra/screens/current_location.dart';
 import 'package:parkmitra/screens/home_screen.dart';
 import 'package:parkmitra/screens/profile_screen.dart';
 // import 'package:myapp/screens/login_screen.dart';
@@ -14,6 +15,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   List pages = [
+    // LocationPage(),
     HomeScreen("username"),
     ActiveScreen(),
     ProfileScreen(),
