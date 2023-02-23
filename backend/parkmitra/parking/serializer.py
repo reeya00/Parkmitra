@@ -32,6 +32,6 @@ class AddVehicleSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def add_vehicle(self, validated_data):
-        instance = self.Meta.model(**validated_data)        
+        instance = self.Meta.model(**validated_data)
         instance.save()
         return instance

@@ -2,7 +2,6 @@ from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view
 from .serializers import RegisterUserSerializer, RetrieveUserSerializer, UserSerializer
 from django.contrib.auth.hashers import make_password
 from .models import CustomUser
@@ -51,4 +50,22 @@ class RetrieveUser(APIView):
     #     return Response(user)
 
 
+class UpdateUser(generics.UpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    queryset = CustomUser.objects.all()
     
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        # make sure to catch 404's below
+        obj = queryset.get(pk=self.request.user.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
+    
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
