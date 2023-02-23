@@ -8,6 +8,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = '__all__'
+        extra_kwargs = {
+            'password': {'write-only': True}
+        }
     
     def create_user(self, validated_data):
         password = validated_data.pop('password', None)

@@ -10,7 +10,7 @@ urlpatterns = [
     path('api/', include('parkmitra.users.api'), name='api'),
     path('user/', include('parkmitra.users.urls'), name='user'),
     
-    path('', include('parkmitra.parking.urls'), name='parking'),
+    path('parkmitra/', include('parkmitra.parking.urls'), name='parking'),
     
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
