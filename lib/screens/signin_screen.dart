@@ -1,16 +1,17 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> createUser(
-    String username, String password, String email) {
-  final response = http.post(
-    // Uri.parse('http://127.0.0.1:8000/user/register/'), //use this for web
+    String username, String password, String email) async {
+  final response = await http.post(
+    Uri.parse('http://127.0.0.1:8000/user/register/'), //use this for web
     // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
-    Uri.http("localhost:8000", "/user/register/"),
+    // Uri.http("localhost:8000", "/user/register/"),
+    // Uri.parse('http://192.168.0.1:8000/user/register/'),
+
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -41,15 +42,23 @@ class _LoginScreenState extends State<SigninScreen> {
   final TextEditingController emailController = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final usernameField = TextFormField(
+      controller: usernameController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Username is required";
         }
         return null;
       },
-      controller: usernameController,
       onSaved: (String? val) {
         username = val!;
       },
@@ -61,13 +70,13 @@ class _LoginScreenState extends State<SigninScreen> {
     );
 
     final emailField = TextFormField(
+      controller: emailController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Email is required";
         }
         return null;
       },
-      controller: emailController,
       onChanged: (val) {
         setState(() {
           username = val;
@@ -81,13 +90,13 @@ class _LoginScreenState extends State<SigninScreen> {
     );
 
     final passwordField = TextFormField(
+      controller: passwordController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Password is required";
         }
         return null;
       },
-      controller: passwordController,
       onChanged: (val) {
         setState(() {
           password = val;
@@ -111,11 +120,12 @@ class _LoginScreenState extends State<SigninScreen> {
             if (_formkey.currentState!.validate()) {
               createUser(usernameController.text, passwordController.text,
                   emailController.text);
+              _formkey.currentState!.save();
+
+              // print(username);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()));
             }
-            _formkey.currentState!.save();
-            // print(username);
-            // Navigator.push(context,
-            // MaterialPageRoute(builder: (context) => LoginScreen()));
           },
           padding: const EdgeInsets.all(20),
           child:
@@ -150,3 +160,12 @@ class _LoginScreenState extends State<SigninScreen> {
     );
   }
 }
+
+// create a Map object with user data
+Map<String, dynamic> userData = {
+  'username': 'john_doe',
+  'email': 'john.doe@example.com',
+  'password': 'password123'
+};
+
+String jsonUserData = jsonEncode(userData);

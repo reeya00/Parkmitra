@@ -6,10 +6,10 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:parkmitra/screens/app_icons.dart';
 
 class MapOsm extends StatefulWidget {
-  // const MapOsm({super.key});
+  const MapOsm({super.key});
   @override
   State<MapOsm> createState() => _MapOsmState();
 }
@@ -17,6 +17,12 @@ class MapOsm extends StatefulWidget {
 class _MapOsmState extends State<MapOsm> {
   Position? _currentPosition;
   @override
+  void initState() {
+    super.initState();
+    getCurrentLocation();
+    print(_currentPosition);
+  }
+
   Widget build(BuildContext context) {
     // ignore: unnecessary_new
     return new Scaffold(
@@ -35,39 +41,57 @@ class _MapOsmState extends State<MapOsm> {
                   width: 80,
                   height: 80,
                   builder: (context) => Container(
-                    child: IconButton(
-                      icon : Icon(Icons.location_on),
-                      color: Colors.red,
-                      iconSize: 40,
-                      onPressed: () => {
-                        print('Marker Tapped')
-                      },
-                    )
-                  ),
+                      child: IconButton(
+                    icon: Icon(
+                      AppIcons.asset_8,
+                      size: 35,
+                      color: Colors.blueAccent,
+                    ),
+                    // color: Colors.red,
+                    iconSize: 40,
+                    onPressed: () => {
+                      print("hello"),
+                      getCurrentLocation,
+                    },
+                  )),
                 ),
-            ],),
-        
-          // Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-          // Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-          // const SizedBox(height: 32),
-          // ElevatedButton(
-          //   onPressed: getCurrentLocation,
-          //   child: const Text("Get Current Location"),)
-          
+                Marker(
+                    point: LatLng(_currentPosition?.latitude ?? 0,
+                        _currentPosition?.longitude ?? 0),
+                    width: 80,
+                    height: 80,
+                    builder: (context) => GestureDetector(
+                          child: const Icon(Icons.location_on),
+                          // color: Colors.red,
+                          onTap: () => {print('Marker Tapped')},
+                        )),
+              ],
+            ),
+
+            // Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+            // Text('LNG: ${_currentPosition?.longitude ?? ""}'),
+            // const SizedBox(height: 32),
+            // Center(
+            //   child: ElevatedButton(
+            //     onPressed: getCurrentLocation,
+            //     child: const Text("Get Current Location"),
+            //   ),
+            // )
           ]),
     );
   }
 
   getCurrentLocation() {
-    Geolocator
-      .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
-      .then((Position position) {
-        setState(() {
-          _currentPosition = position;
-        });
-      }).catchError((e) {
-        print(e);
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        print("****currentposis**** $_currentPosition");
       });
+    }).catchError((e) {
+      print(e);
+    });
   }
 }
-

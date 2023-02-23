@@ -17,6 +17,7 @@ SECRET_KEY = os.environ.get("PARKMITRA_SECRET_KEY", "DJANGO_INSECURE_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("PARKMITRA_DEBUG","False") == "True"
 
+
 # ALLOWED_HOSTS = ['192.168.0.243', '10.0.2.2', '127.0.0.1', 'localhost']
 ALLOWED_HOSTS = os.environ.get("PARKMITRA_ALLOWED_HOSTS", "*").split(",")
 

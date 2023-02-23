@@ -41,7 +41,9 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.4
   permission_handler: ^6.1.1
-
+  http: ^0.13.5
+  flutter_polyline_points: ^1.0.0
+  intl: ^0.17.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -81,7 +83,13 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family:  AppIcons
+      fonts:
+        - asset: assets/fonts/AppIcons.ttf
+
+
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
