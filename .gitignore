@@ -42,3 +42,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+#environment files
+backend/.env
+/backend/venv/
+
+#anything with . at the beginning
+.*
+
+#database
+/backend/db.sqlite3
+
+#vscode config 
+.vscode/
