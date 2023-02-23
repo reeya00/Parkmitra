@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:parkmitra/screens/qr_scaner.dart';
 
 class ParkinglotScreen extends StatefulWidget {
   const ParkinglotScreen({super.key});
@@ -285,7 +286,12 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
                     ),
                     backgroundColor: Colors.blue,
                   ),
-                  onPressed: () => {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyCustomWidget()));
+                  },
                   child: Text('Book Now',
                       style: TextStyle(color: Color(0xffCCE9F2), fontSize: 20)),
                 ),
