@@ -1,5 +1,8 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:flutter/material.dart';
 import 'package:parkmitra/screens/home_screen.dart';
+import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -141,6 +144,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     passwordField,
                     const SizedBox(height: 20),
                     loginbutton,
+                    const SizedBox(height: 20,),
+                    TextButton(
+                      onPressed: ()=>{
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SigninScreen()))
+                      }, 
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                        const Text(
+                        "Don't have an account? ",
+                        style: const TextStyle(fontSize: 15, color:const Color(0xff222651) ),
+                        ),
+                        const Text("Sign Up",
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:const Color(0xff222651),
+                        decoration: TextDecoration.underline
+                        ),
+                        )
+                        ],
+                      )
+                    )
                   ],
                 ),
               ))),

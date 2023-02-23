@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:parkmitra/screens/current_location.dart';
+import 'package:parkmitra/screens/nav_bar.dart';
 import 'package:parkmitra/screens/osmtry.dart';
 // import 'package:myapp/screens/login_screen.dart';
 
@@ -18,7 +19,12 @@ class HomeScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
 
       ),
-      body:LocationPage(),
+      body:Stack(
+        children: [
+          LocationPage(),
+          // NavBar()
+        ],
+      ),
     );
   }
 }

@@ -5,9 +5,28 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'dart:math';
-
 import 'app_icons.dart';
+
+class MarkerGestureDetector extends StatelessWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  MarkerGestureDetector({
+    required this.child,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onTap,
+      child: child,
+    );
+  }
+}
 
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key}) : super(key: key);
@@ -94,9 +113,9 @@ class _LocationPageState extends State<LocationPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+        body: SafeArea(
       child: FlutterMap(
-          options: MapOptions(center: LatLng(27.7172, 85.3240), minZoom: 10.0),
+          options: MapOptions(center: LatLng(27.6771, 85.3171), minZoom: 10.0),
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -106,7 +125,7 @@ class _LocationPageState extends State<LocationPage> {
             MarkerLayer(
               markers: [
                 Marker(
-                    point: LatLng(27.7172, 85.3240),
+                    point: LatLng(27.6771, 85.3171),
                     width: 80,
                     height: 80,
                     builder: (context) => InkWell(
@@ -117,45 +136,95 @@ class _LocationPageState extends State<LocationPage> {
                             opticalSize: 40,
                           ),
                           onTap: () {
-                            setState(() {});
-                          },
-                        )
-                    ),
-                Marker(
-                    point: LatLng(_currentPosition?.latitude ?? 0,
-                        _currentPosition?.longitude ?? 0),
-                    width: 80,
-                    height: 80,
-                    builder: (context) => GestureDetector(
-                       child: Icon(
-                            Icons.location_on,
-                            size: 40,
-                            color: Colors.red,
+                            print("markertapped");
+                            showBottomSheet(
+                              context: context,
+                              builder:(context){
+                                return SizedBox(
+                                    height: 200,
+                                    width: double.infinity,
+                                    child: Card(
+                                color: Colors.blue.shade100,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    ListTile(
+                                      title: const Text('Labim Mall',
+                                          style: TextStyle(
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.bold)),
+                                      subtitle: const Text('Pulchowk, Lalitpur'),
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        SizedBox(width: 15, height: 20),
+                                        Text(
+                                          '300 km away',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text('Rs. 10 per hour',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15)),
+                                        SizedBox(width: 30,),
+                                        ElevatedButton(
+                                          onPressed: ()=> 
+                                          Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) => ParkinglotScreen())),
+                                          child: Text("Visit", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                                  );}
+                                );
+                              }
+                            )
+                          ,
                         ),
-                        onTap: () {
-                          print("marker tapped");
-                          Card(
-                          color: Colors.blue,
-                          );
-                        },
-                         
-                          
-                        )),
+                Marker(
+                  point: LatLng(_currentPosition?.latitude ?? 0,
+                      _currentPosition?.longitude ?? 0),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => MarkerGestureDetector(
+                    child: Icon(
+                      Icons.location_on,
+                      size: 40,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      print("marker tapped");
+                      // Do something when the marker is tapped
+                    },
+                  ),
+                ),
               ],
             ),
-            PolylineLayer(
-              polylineCulling: false,
-              polylines: [
-                Polyline(
-                  points: [
-                    LatLng(27.7172, 85.3240),
-                    LatLng(_currentPosition?.latitude ?? 0,
-                        _currentPosition?.longitude ?? 0)
-                  ],
-                  color: Colors.blue,
-                )
-              ],
-            )
+            // PolylineLayer(
+            //   polylineCulling: false,
+            //   polylines: [
+            //     Polyline(
+            //       points: [
+            //         LatLng(27.7172, 85.3240),
+            //         LatLng(_currentPosition?.latitude ?? 0,
+            //             _currentPosition?.longitude ?? 0)
+            //       ],
+            //       color: Colors.blue,
+            //     )
+            //   ],
+            // )
           ]),
     ));
   }
