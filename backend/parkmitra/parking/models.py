@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from ..users.models import CustomUser
-from datetime import datetime
 
 class Vehicle(models.Model):
     class VechicleTypeChoices(models.TextChoices):
