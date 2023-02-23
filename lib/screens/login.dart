@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_const
-
 import 'package:flutter/material.dart';
 import 'package:parkmitra/screens/home_screen.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
@@ -10,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-bool loggedin = false;
 
 Future<Map<String, dynamic>> loginUser(String username, String password) async {
   final response = await http.post(
@@ -30,7 +27,6 @@ Future<Map<String, dynamic>> loginUser(String username, String password) async {
   if (response.statusCode == 200) {
     // User is authenticated
     // print('User authenticated');
-    loggedin = true;
     final Map<String, dynamic> responseData = json.decode(response.body);
     final refresh_token = responseData['refresh'];
     final access_token = responseData['access'];
@@ -52,23 +48,29 @@ Future<Map<String, dynamic>> loginUser(String username, String password) async {
 
 }
 
-
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScree extends StatefulWidget {
+  const LoginScree({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScree> createState() => _LoginScreeState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreeState extends State<LoginScree> {
   late String username;
   late String password;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  
+  @override
+  void dispose() {
+    super.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
+
+    //usernamefield
     final usernameField = TextFormField(
       controller: usernameController,
       validator: (String? value) {
@@ -77,10 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         return null;
       },
-      onChanged: (val) {
-        setState(() {
-          username = val;
-        });
+      onSaved: (String? val) {
+        username = val!;
       },
       style: myStyle,
       decoration: InputDecoration(
@@ -89,7 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
     );
 
-    final passwordField = TextFormField(
+  //passwordfield
+  final passwordField = TextFormField(
       controller: passwordController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
@@ -117,79 +118,68 @@ class _LoginScreenState extends State<LoginScreen> {
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
-            //   if (_formkey.currentState!.validate()) {
-            //   loginUser(usernameController.text, passwordController.text,);
-            //   _formkey.currentState!.save();
-            //   Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => NavBar()));
-
-            // }
-
-            loginUser(
+            if (_formkey.currentState!.validate()) {
+              loginUser(
               usernameController.text,
               passwordController.text,
             );
-            // ignore: avoid_print
-            print(loggedin);
-            // if(loggedin = true){
-            //   Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => NavBar()));
-            // }
+              _formkey.currentState!.save();
+
+              // print(username);
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => LoginScreen()));
+            }
           },
           padding: const EdgeInsets.all(20),
           child:
               const Text('Login', style: TextStyle(color: Color(0xffCCE9F2))),
-        ));
+        )
+      );
     return Scaffold(
       body: Center(
-          child: Container(
-              color: const Color(0xff0078B7),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    Image.asset('assets/images/logo.png', scale: 10),
-                    const SizedBox(height: 20),
-                    usernameField,
-                    const SizedBox(height: 20),
-                    passwordField,
-                    const SizedBox(height: 20),
-                    loginbutton,
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextButton(
-                        onPressed: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SigninScreen()))
-                            },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            const Text(
-                              "Don't have an account? ",
-                              style: const TextStyle(
-                                  fontSize: 15, color: const Color(0xff222651)),
-                            ),
-                            const Text(
-                              "Sign Up",
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xff222651),
-                                  decoration: TextDecoration.underline),
-                            )
-                          ],
-                        ))
-                  ],
-                ),
-              ))),
+          child: Form(
+        key: _formkey,
+        child: Container(
+            color: const Color(0xff0078B7),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20),
+                  Image.asset('assets/images/logo.png', scale: 10),
+                  const SizedBox(height: 20),
+                  usernameField,
+                  const SizedBox(height: 20),
+                  passwordField,
+                  const SizedBox(height: 20),
+                  loginbutton,
+                  const SizedBox(height: 20,),
+                  TextButton(
+                      onPressed: ()=>{
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SigninScreen()))
+                      }, 
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                        const Text(
+                        "Don't have an account? ",
+                        style: const TextStyle(fontSize: 15, color:const Color(0xff222651) ),
+                        ),
+                        const Text("Sign Up",
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:const Color(0xff222651),
+                        decoration: TextDecoration.underline
+                        ),
+                        )
+                        ],
+                      )
+                    )
+                ],
+              ),
+            )),
+      )),
     );
   }
 }

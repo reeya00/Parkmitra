@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkmitra/screens/current_location.dart';
 import 'package:parkmitra/screens/home_screen.dart';
+import 'package:parkmitra/screens/login.dart';
 import 'package:parkmitra/screens/login_screen.dart';
 import 'package:parkmitra/screens/nav_bar.dart';
 import 'package:parkmitra/screens/osmtry.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: LoginScree(),
     );
   }
 }

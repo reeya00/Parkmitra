@@ -19,6 +19,7 @@ Future<http.Response> createUser(
       'username': username,
       'password': password,
       'email': email,
+      'is_active': 'true'
     }),
   );
   return response;
