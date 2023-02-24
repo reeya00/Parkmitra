@@ -35,7 +35,17 @@ Future<Map<String, dynamic>> loginUser(String username, String password) async {
     final refresh_token = responseData['refresh'];
     final access_token = responseData['access'];
     final username = responseData['username'];
-    
+    http.patch(
+      Uri.parse('http://127.0.0.1:8000/user/update/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authentication': 'Bearer $access_token'
+      },
+      body: jsonEncode(<String, String>{
+        'access_token': access_token,
+        'refresh_token': refresh_token,
+      }),
+    );
     // storeTokens(refresh_token, access_token);
     // return {
     //   'refresh_token': responseData['refresh'],
@@ -49,10 +59,7 @@ Future<Map<String, dynamic>> loginUser(String username, String password) async {
     final String errorMessage = responseData['detail'];
   }
   throw Exception("errorMessage");
-
 }
-
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
