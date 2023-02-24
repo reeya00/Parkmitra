@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'login.dart';
 import 'login_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -126,7 +127,7 @@ class _LoginScreenState extends State<SigninScreen> {
 
               // print(username);
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()));
+                  MaterialPageRoute(builder: (context) => LoginScree()));
             }
           },
           padding: const EdgeInsets.all(20),
@@ -163,7 +164,7 @@ class _LoginScreenState extends State<SigninScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginScreen()))
+                                    builder: (context) => LoginScree()))
                           },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

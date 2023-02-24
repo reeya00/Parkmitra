@@ -1,0 +1,3 @@
+PARKMITRA_SECRET_KEY="g34uhfbwiort2h90sg&cqk2&vn-+9gfagwt4925hax4g0p&-asfawr"
+PARKMITRA_DEBUG="True"
+PARKMITRA_ALLOWED_HOSTS="192.168.0.243,10.0.2.2,127.0.0.1,localhost"

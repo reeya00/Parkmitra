@@ -10,10 +10,12 @@ import 'retriever.dart';
 class Globals {
   static String refresh_token = '';
   static String access_token = '';
+  static String user_name = '';
 }
 
 TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+bool loggedin = false;
 
 void loginUser(String username, String password) async {
   final response = await http.post(
@@ -38,7 +40,10 @@ void loginUser(String username, String password) async {
     Globals.access_token = responseData['access'];
     final temp = 'Bearer ' + Globals.access_token;
     final username = responseData['username'];
-    print(fetchUserData());
+    Globals.user_name = responseData['username'];
+    print(username);
+    print(Globals.user_name);
+    // print(fetchUserData());
     final patchResponse = await http.patch(
         Uri.parse('http://127.0.0.1:8000/user/update/'),
         headers: <String, String>{
@@ -133,11 +138,56 @@ class _LoginScreeState extends State<LoginScree> {
                 usernameController.text,
                 passwordController.text,
               );
+              // Future.delayed(Duration(seconds: 10));
+              
+              // CircularProgressIndicator();
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => NavBar()));
               _formkey.currentState!.save();
             }
           },
+          // onPressed: () async {
+          //   print(username);
+          //   print(password);
+          //   final isValid = _formkey.currentState?.validate();
+          //   var response =
+          //       await http.post(Uri.parse('http://127.0.0.1:8000/api/token/'),
+          //           headers: <String, String>{
+          //             'Content-Type': 'application/json; charset=UTF-8',
+          //           },
+          //           body: jsonEncode(<String, String>{
+          //             'username': username,
+          //             'password': password,
+          //           }));
+
+          //   if (response.statusCode == 401) {
+          //     final responseData = json.decode(response.body);
+          //     print(responseData);
+          //     const snackBar = SnackBar(
+          //       content: Text(
+          //         "Wrong Credentials",
+          //         style: TextStyle(fontSize: 20),
+          //       ),
+          //       backgroundColor: Colors.red,
+          //     );
+          //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //   }
+          //   if (response.statusCode == 201) {
+          //     var responseData = json.decode(response.body);
+          //     const snackBar = SnackBar(
+          //       content: Text(
+          //         "Logged In",
+          //         style: TextStyle(fontSize: 20),
+          //       ),
+          //       backgroundColor: Colors.green,
+          //     );
+          //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //     print(responseData);
+
+          //     Map object = responseData;
+          //     String token = object['token'];
+          //   }
+          // },
           padding: const EdgeInsets.all(20),
           child:
               const Text('Login', style: TextStyle(color: Color(0xffCCE9F2))),
