@@ -12,7 +12,8 @@ TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 bool loggedin = false;
 
-Future<Map<String, dynamic>> loginUser(String username, String password) async {
+//Future<Map<String, dynamic>>
+void loginUser(String username, String password) async {
   final response = await http.post(
     Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
     // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
@@ -29,13 +30,13 @@ Future<Map<String, dynamic>> loginUser(String username, String password) async {
   );
   if (response.statusCode == 200) {
     // User is authenticated
-    // print('User authenticated');
+    print('User authenticated');
     loggedin = true;
     final Map<String, dynamic> responseData = json.decode(response.body);
     final refresh_token = responseData['refresh'];
     final access_token = responseData['access'];
     final username = responseData['username'];
-    
+    // print("$username, $password, $refresh_token");
     // storeTokens(refresh_token, access_token);
     // return {
     //   'refresh_token': responseData['refresh'],
@@ -48,11 +49,7 @@ Future<Map<String, dynamic>> loginUser(String username, String password) async {
     final Map<String, dynamic> responseData = json.decode(response.body);
     final String errorMessage = responseData['detail'];
   }
-  throw Exception("errorMessage");
-
 }
-
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -77,10 +74,10 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         return null;
       },
-      onChanged: (val) {
-        setState(() {
-          username = val;
-        });
+      onSaved: (val) {
+        (String? val) {
+          username = val!;
+        };
       },
       style: myStyle,
       decoration: InputDecoration(

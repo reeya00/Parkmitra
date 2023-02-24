@@ -4,12 +4,18 @@ import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'retriever.dart';
+
+//use cubit for state management
+class Globals {
+  static String refresh_token = '';
+  static String access_token = '';
+}
 
 TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-Future<Map<String, dynamic>> loginUser(String username, String password) async {
+void loginUser(String username, String password) async {
   final response = await http.post(
     Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
     // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
@@ -28,24 +34,28 @@ Future<Map<String, dynamic>> loginUser(String username, String password) async {
     // User is authenticated
     // print('User authenticated');
     final Map<String, dynamic> responseData = json.decode(response.body);
-    final refresh_token = responseData['refresh'];
-    final access_token = responseData['access'];
+    Globals.refresh_token = responseData['refresh'];
+    Globals.access_token = responseData['access'];
+    final temp = 'Bearer ' + Globals.access_token;
     final username = responseData['username'];
-    
-    // storeTokens(refresh_token, access_token);
-    // return {
-    //   'refresh_token': responseData['refresh'],
-    //   'access_token': responseData['access'],
-    //   'username': username
-    // };
+    print(fetchUserData());
+    final patchResponse = await http.patch(
+        Uri.parse('http://127.0.0.1:8000/user/update/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': temp
+        },
+        body: jsonEncode(<String, String>{
+          'refresh_token': Globals.refresh_token,
+          'access_token': Globals.access_token,
+        }));
   } else {
     // User is not authenticated
     // print('User not authenticated');
     final Map<String, dynamic> responseData = json.decode(response.body);
     final String errorMessage = responseData['detail'];
+    throw Exception(errorMessage);
   }
-  throw Exception("errorMessage");
-
 }
 
 class LoginScree extends StatefulWidget {
@@ -60,16 +70,16 @@ class _LoginScreeState extends State<LoginScree> {
   late String password;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  
+
   @override
   void dispose() {
     super.dispose();
     usernameController.dispose();
     passwordController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-
     //usernamefield
     final usernameField = TextFormField(
       controller: usernameController,
@@ -89,8 +99,8 @@ class _LoginScreeState extends State<LoginScree> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
     );
 
-  //passwordfield
-  final passwordField = TextFormField(
+    //passwordfield
+    final passwordField = TextFormField(
       controller: passwordController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
@@ -120,21 +130,18 @@ class _LoginScreeState extends State<LoginScree> {
           onPressed: () {
             if (_formkey.currentState!.validate()) {
               loginUser(
-              usernameController.text,
-              passwordController.text,
-            );
+                usernameController.text,
+                passwordController.text,
+              );
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => NavBar()));
               _formkey.currentState!.save();
-
-              // print(username);
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => LoginScreen()));
             }
           },
           padding: const EdgeInsets.all(20),
           child:
               const Text('Login', style: TextStyle(color: Color(0xffCCE9F2))),
-        )
-      );
+        ));
     return Scaffold(
       body: Center(
           child: Form(
@@ -155,27 +162,35 @@ class _LoginScreeState extends State<LoginScree> {
                   passwordField,
                   const SizedBox(height: 20),
                   loginbutton,
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   TextButton(
-                      onPressed: ()=>{
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SigninScreen()))
-                      }, 
+                      onPressed: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SigninScreen()))
+                          },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
-                        const Text(
-                        "Don't have an account? ",
-                        style: const TextStyle(fontSize: 15, color:const Color(0xff222651) ),
-                        ),
-                        const Text("Sign Up",
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:const Color(0xff222651),
-                        decoration: TextDecoration.underline
-                        ),
-                        )
+                          const Text(
+                            "Don't have an account? ",
+                            style: const TextStyle(
+                                fontSize: 15, color: const Color(0xff222651)),
+                          ),
+                          const Text(
+                            "Sign Up",
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xff222651),
+                                decoration: TextDecoration.underline),
+                          )
                         ],
-                      )
-                    )
+                      ))
                 ],
               ),
             )),

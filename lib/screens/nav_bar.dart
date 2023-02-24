@@ -16,7 +16,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   List pages = [
     // LocationPage(),
-    HomeScreen("username"),
+    HomeScreen(),
     ActiveScreen(),
     ProfileScreen(),
   ];

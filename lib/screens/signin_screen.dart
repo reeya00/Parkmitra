@@ -37,6 +37,7 @@ class SigninScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<SigninScreen> {
   late String username;
+  late String email;
   late String password;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<SigninScreen> {
       },
       onChanged: (val) {
         setState(() {
-          username = val;
+          email = val;
         });
       },
       style: myStyle,
@@ -154,27 +155,35 @@ class _LoginScreenState extends State<SigninScreen> {
                   passwordField,
                   const SizedBox(height: 20),
                   loginbutton,
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   TextButton(
-                      onPressed: ()=>{
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()))
-                      }, 
+                      onPressed: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()))
+                          },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
-                        const Text(
-                        "Already have an account? ",
-                        style: const TextStyle(fontSize: 15, color:const Color(0xff222651) ),
-                        ),
-                        const Text("Login",
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:const Color(0xff222651),
-                        decoration: TextDecoration.underline
-                        ),
-                        )
+                          const Text(
+                            "Already have an account? ",
+                            style: const TextStyle(
+                                fontSize: 15, color: const Color(0xff222651)),
+                          ),
+                          const Text(
+                            "Login",
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xff222651),
+                                decoration: TextDecoration.underline),
+                          )
                         ],
-                      )
-                    )
+                      ))
                 ],
               ),
             )),
