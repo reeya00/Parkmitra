@@ -154,27 +154,35 @@ class _LoginScreenState extends State<SigninScreen> {
                   passwordField,
                   const SizedBox(height: 20),
                   loginbutton,
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   TextButton(
-                      onPressed: ()=>{
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()))
-                      }, 
+                      onPressed: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()))
+                          },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
-                        const Text(
-                        "Already have an account? ",
-                        style: const TextStyle(fontSize: 15, color:const Color(0xff222651) ),
-                        ),
-                        const Text("Login",
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:const Color(0xff222651),
-                        decoration: TextDecoration.underline
-                        ),
-                        )
+                          const Text(
+                            "Already have an account? ",
+                            style: const TextStyle(
+                                fontSize: 15, color: const Color(0xff222651)),
+                          ),
+                          const Text(
+                            "Login",
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xff222651),
+                                decoration: TextDecoration.underline),
+                          )
                         ],
-                      )
-                    )
+                      ))
                 ],
               ),
             )),
@@ -182,12 +190,3 @@ class _LoginScreenState extends State<SigninScreen> {
     );
   }
 }
-
-// create a Map object with user data
-Map<String, dynamic> userData = {
-  'username': 'john_doe',
-  'email': 'john.doe@example.com',
-  'password': 'password123'
-};
-
-String jsonUserData = jsonEncode(userData);
