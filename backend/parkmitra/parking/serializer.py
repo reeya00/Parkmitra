@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Vehicle
+from .models import Vehicle, ParkingSession
 from django.db import models
 from django.conf import settings
 
@@ -32,6 +32,16 @@ class AddVehicleSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def add_vehicle(self, validated_data):
+        instance = self.Meta.model(**validated_data)
+        instance.save()
+        return instance
+    
+class ParkingSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ParkingSession
+        fields = '__all__'
+    
+    def add_session(self, validated_data):
         instance = self.Meta.model(**validated_data)
         instance.save()
         return instance

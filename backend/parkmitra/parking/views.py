@@ -1,5 +1,5 @@
-from .serializer import VehicleSerializer, VehicleSerializer1, AddVehicleSerializer
-from .models import Vehicle
+from .serializer import VehicleSerializer, VehicleSerializer1, AddVehicleSerializer, ParkingSessionSerializer
+from .models import Vehicle, ParkingSession
 from rest_framework import viewsets, permissions, status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -56,3 +56,13 @@ class AddVehicle(generics.CreateAPIView):
     #             print("inside exception")
     #             return Exception
     #     return Response(vehicle_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ListSession(generics.ListAPIView):
+    queryset = ParkingSession.objects.all()
+    serializer_class = ParkingSessionSerializer
+
+class CreateSession(generics.CreateAPIView):
+    permission_classes = [permissions.DjangoModelPermissions]
+    queryset = ParkingSession.objects.all()
+    serializer_class = ParkingSessionSerializer
+

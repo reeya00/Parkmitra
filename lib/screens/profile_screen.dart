@@ -123,6 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     'numberPlate': numberPlate,
                     'vehicleModel': vehicleModel,
                     'vehicleColor': vehicleColor,
+                    'vehicleType': dropdownvalue
                   };
                   addNewVehicle(name, numberPlate, vehicleModel, vehicleColor);
                   Navigator.pop(context, newVehicle);
