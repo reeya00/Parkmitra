@@ -8,6 +8,7 @@ class Vehicle(models.Model):
         BIKE = "BIKE", "Bike"
         JEEP = "JEEP", "Jeep"
         VAN = "VAN", "Van"
+        SCOOTER = "SCOOTER", "Scooter"
     
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=False)
     vehicle_type = models.CharField(max_length=32, choices=VechicleTypeChoices.choices)

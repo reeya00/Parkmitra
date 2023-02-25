@@ -35,10 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             } else if (snapshot.hasError) {
               // Reload the HomeScreen if an error occurs
-              Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => NavBar()));
+              Future.delayed(Duration(milliseconds: 500)).then((_) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => NavBar()));
+              });
               return const Text("Error loading user data");
             } else {
               return const CircularProgressIndicator();
