@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:parkmitra/screens/home_screen.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'retriever.dart';
 
 //use cubit for state management
 class Globals {
@@ -54,6 +52,16 @@ void loginUser(String username, String password) async {
           'refresh_token': Globals.refresh_token,
           'access_token': Globals.access_token,
         }));
+  } else if (response.statusCode == 401) {
+    final refreshResponse = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/token/refresh/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(<String, String>{
+          'refresh_token': Globals.refresh_token,
+        }));
+    Globals.access_token = json.decode(refreshResponse.body)['access'];
   } else {
     // User is not authenticated
     // print('User not authenticated');
@@ -139,7 +147,7 @@ class _LoginScreeState extends State<LoginScree> {
                 passwordController.text,
               );
               // Future.delayed(Duration(seconds: 10));
-              
+
               // CircularProgressIndicator();
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => NavBar()));

@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           "plate_number": numberPlate,
           "owner": "4"
         }));
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
     } else {
       final Map<String, dynamic> responseData = json.decode(response.body);

@@ -60,7 +60,7 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("username", style: const TextStyle(fontSize: 25)),
+        title: Text("Book", style: const TextStyle(fontSize: 25)),
       ),
       body: Center(
         child: Column(
@@ -75,7 +75,7 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       ListTile(
                         title: const Text('Labim Mall',
@@ -86,7 +86,7 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          SizedBox(width: 15, height: 90),
+                          SizedBox(width: 15, height: 70),
                           Text(
                             '300 km away',
                             style: TextStyle(
@@ -199,13 +199,14 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
                                         setState(() {
                                           entrytimeinput.text =
                                               entryTime.format(context);
-                                          starttime = TimeOfDay(
-                                              hour: int.parse(entrytimeinput
-                                                  .text
-                                                  .split(':')[0]),
-                                              minute: int.parse(entrytimeinput
-                                                  .text
-                                                  .split(':')[1]));
+                                          // starttime = TimeOfDay(
+                                          //     hour: int.parse(entrytimeinput
+                                          //         .text
+                                          //         .split(':')[0]),
+                                          //     minute: int.parse(entrytimeinput
+                                          //         .text
+                                          //         .split(':')[1]));
+                                          starttime = entryTime;
                                           print("start $starttime");
                                           calcdifference = findTimeDifference(
                                               starttime, endtime);
@@ -231,12 +232,13 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
                                         setState(() {
                                           exittimeinput.text =
                                               exitTime.format(context);
-                                          endtime = TimeOfDay(
-                                              hour: int.parse(exittimeinput.text
-                                                  .split(':')[0]),
-                                              minute: int.parse(exittimeinput
-                                                  .text
-                                                  .split(':')[1]));
+                                          // endtime = TimeOfDay(
+                                          //     hour: int.parse(exittimeinput.text
+                                          //         .split(':')[0]),
+                                          //     minute: int.parse(exittimeinput
+                                          //         .text
+                                          //         .split(':')[1]));
+                                          endtime = exitTime;
                                           print("end $endtime");
                                           // print(starttime);
                                           calcdifference = findTimeDifference(
