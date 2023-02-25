@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<Map<String, dynamic>> userData;
+  bool reload = false;
 
   @override
   void initState() {
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             } else if (snapshot.hasError) {
               // Reload the HomeScreen if an error occurs
               Future.delayed(Duration(milliseconds: 500)).then((_) {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) => NavBar()));

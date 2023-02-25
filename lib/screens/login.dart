@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_declarations
+
 import 'package:flutter/material.dart';
 import 'package:parkmitra/screens/home_screen.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
@@ -17,7 +19,7 @@ TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 bool loggedin = false;
 
-void loginUser(String username, String password) async {
+void loginUser(String username, String password, Function() onSucess) async {
   final response = await http.post(
     Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
     // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
@@ -35,12 +37,13 @@ void loginUser(String username, String password) async {
   if (response.statusCode == 200) {
     // User is authenticated
     // print('User authenticated');
+
     final Map<String, dynamic> responseData = json.decode(response.body);
     Globals.refresh_token = responseData['refresh'];
     Globals.access_token = responseData['access'];
     final temp = 'Bearer ' + Globals.access_token;
     final username = responseData['username'];
-    Globals.user_name = responseData['username'];
+    // Globals.user_name = responseData['username'];
     print(username);
     print(Globals.user_name);
     // print(fetchUserData());
@@ -54,6 +57,7 @@ void loginUser(String username, String password) async {
           'refresh_token': Globals.refresh_token,
           'access_token': Globals.access_token,
         }));
+    onSucess();
   } else {
     // User is not authenticated
     // print('User not authenticated');
@@ -62,6 +66,14 @@ void loginUser(String username, String password) async {
     throw Exception(errorMessage);
   }
 }
+
+void showSnackBar(BuildContext context, String message) {
+  final snackBar = SnackBar(
+    content: Text(message),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
 
 class LoginScree extends StatefulWidget {
   const LoginScree({super.key});
@@ -134,60 +146,19 @@ class _LoginScreeState extends State<LoginScree> {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             if (_formkey.currentState!.validate()) {
-              loginUser(
-                usernameController.text,
-                passwordController.text,
-              );
+              loginUser(usernameController.text, passwordController.text, () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => NavBar()));
+                _formkey.currentState!.save();
+              });
               // Future.delayed(Duration(seconds: 10));
-              
+
               // CircularProgressIndicator();
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NavBar()));
-              _formkey.currentState!.save();
             }
+            else{
+              showSnackBar(context, 'Wrong Credentials');
+          }
           },
-          // onPressed: () async {
-          //   print(username);
-          //   print(password);
-          //   final isValid = _formkey.currentState?.validate();
-          //   var response =
-          //       await http.post(Uri.parse('http://127.0.0.1:8000/api/token/'),
-          //           headers: <String, String>{
-          //             'Content-Type': 'application/json; charset=UTF-8',
-          //           },
-          //           body: jsonEncode(<String, String>{
-          //             'username': username,
-          //             'password': password,
-          //           }));
-
-          //   if (response.statusCode == 401) {
-          //     final responseData = json.decode(response.body);
-          //     print(responseData);
-          //     const snackBar = SnackBar(
-          //       content: Text(
-          //         "Wrong Credentials",
-          //         style: TextStyle(fontSize: 20),
-          //       ),
-          //       backgroundColor: Colors.red,
-          //     );
-          //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          //   }
-          //   if (response.statusCode == 201) {
-          //     var responseData = json.decode(response.body);
-          //     const snackBar = SnackBar(
-          //       content: Text(
-          //         "Logged In",
-          //         style: TextStyle(fontSize: 20),
-          //       ),
-          //       backgroundColor: Colors.green,
-          //     );
-          //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          //     print(responseData);
-
-          //     Map object = responseData;
-          //     String token = object['token'];
-          //   }
-          // },
           padding: const EdgeInsets.all(20),
           child:
               const Text('Login', style: TextStyle(color: Color(0xffCCE9F2))),

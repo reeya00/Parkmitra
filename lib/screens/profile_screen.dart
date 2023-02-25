@@ -145,6 +145,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Added Vehicles'),
+      ),
       body: ListView.builder(
         itemCount: _vehicles.length,
         itemBuilder: (BuildContext context, int index) {

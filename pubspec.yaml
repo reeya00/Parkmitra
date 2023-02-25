@@ -36,16 +36,17 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   latlong: ^0.6.1
+  latlong2: ^0.8.1
   flutter_map: any
   flutter_map_marker_cluster: any
   geolocator: ^8.2.0
-  geocoding: ^2.0.4
   permission_handler: ^6.1.1
   http: ^0.13.5
   flutter_polyline_points: ^1.0.0
   intl: ^0.17.0
   open_route_service: ^1.2.2
   shared_preferences: ^2.0.18
+  geocoding: ^2.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
