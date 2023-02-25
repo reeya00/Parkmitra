@@ -1,12 +1,10 @@
 // ignore_for_file: prefer_const_declarations
 
 import 'package:flutter/material.dart';
-import 'package:parkmitra/screens/home_screen.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'retriever.dart';
 
 //use cubit for state management
 class Globals {
@@ -152,6 +150,7 @@ class _LoginScreeState extends State<LoginScree> {
                 _formkey.currentState!.save();
               });
               // Future.delayed(Duration(seconds: 10));
+
 
               // CircularProgressIndicator();
             }
