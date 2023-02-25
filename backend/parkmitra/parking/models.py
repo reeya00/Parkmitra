@@ -61,7 +61,8 @@ class ParkingSpace(models.Model):
 class ParkingSession(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=True)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, blank=False, null=True)
-    parking_spot = models.ForeignKey(ParkingSpace, on_delete=models.CASCADE, blank=False, null=False)
+    # parking_spot = models.ForeignKey(ParkingSpace, on_delete=models.CASCADE, blank=False, null=False)
+    parking_spot = models.CharField(max_length=64)
     entry_time = models.DateTimeField()
     exit_time = models.DateTimeField(null=True, blank=True)
 
