@@ -9,6 +9,13 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   List<Map<String, String>> _vehicles = [];
+  var items = [
+    'BIKE',
+    'CAR',
+    'VAN',
+    'JEEP',
+  ];
+  // String dropdownvalue = 'BIKE';
 
   void addNewVehicle(name, numberPlate, vehicleModel, vehicleColor) async {
     final response = await http.post(
@@ -41,12 +48,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         String numberPlate = '';
         String vehicleColor = '';
         String vehicleModel = '';
-        var items = [
-          'BIKE',
-          'CAR',
-          'VAN',
-          'JEEP',
-        ];
+        // var items = [
+        //   'BIKE',
+        //   'CAR',
+        //   'VAN',
+        //   'JEEP',
+        // ];
         String dropdownvalue = 'BIKE';
 
         return Container(
@@ -88,12 +95,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       vehicleModel = value;
                     },
                   ),
-                  DropdownButton(
+                  DropdownButton<String>(
                     // Initial Value
                     value: dropdownvalue,
                     icon: const Icon(Icons.keyboard_arrow_down),
                     items: items.map((String items) {
-                      return DropdownMenuItem(
+                      return DropdownMenuItem<String>(
                         value: items,
                         child: Text(items),
                       );
@@ -102,7 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // change button value to selected value
                     onChanged: (String? newValue) {
                       setState(() {
+                        // print(dropdownvalue);
                         dropdownvalue = newValue!;
+                        // print(newValue);
+                        // print(dropdownvalue);
                       });
                     },
                   ),
