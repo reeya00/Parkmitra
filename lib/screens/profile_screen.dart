@@ -75,9 +75,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView.builder(
         itemCount: _vehicles.length,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
+          return Card(
+            color: Colors.blue.shade100,
+            child:ListTile(
             title: Text(_vehicles[index]['name']!),
             subtitle: Text(_vehicles[index]['numberPlate']!),
+          ),
           );
         },
       ),
