@@ -62,7 +62,7 @@ class ListSession(generics.ListAPIView):
     serializer_class = ParkingSessionSerializer
 
 class CreateSession(generics.CreateAPIView):
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = ParkingSession.objects.all()
     serializer_class = ParkingSessionSerializer
 

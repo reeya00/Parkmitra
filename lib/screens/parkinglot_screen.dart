@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'login.dart';
 
 class ParkinglotScreen extends StatefulWidget {
   const ParkinglotScreen({super.key});
@@ -95,7 +97,7 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Rs. 10 per hour',
+                          Text('Rs. 90 per hour',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
@@ -287,7 +289,49 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
                     ),
                     backgroundColor: Colors.blue,
                   ),
-                  onPressed: () => {},
+                  onPressed: () async {
+                    print('onpressed clicked book');
+                    final temp = 'Bearer ' + Globals.access_token;
+                    DateTime now = DateTime.now();
+                    DateTime dateTime_start = DateTime(now.year, now.month,
+                        now.day, starttime.hour, starttime.minute);
+                    String iso8601string_start =
+                        dateTime_start.toIso8601String();
+                    DateTime dateTime_end = DateTime(now.year, now.month,
+                        now.day, endtime.hour, endtime.minute);
+                    String iso8601string_end = dateTime_end.toIso8601String();
+                    final postResponse = await http.post(
+                        Uri.parse(
+                            'http://127.0.0.1:8000/parkmitra/sessions/add'),
+                        headers: <String, String>{
+                          'Content-Type': 'application/json; charset=UTF-8',
+                          'Authorization': temp
+                        },
+                        body: jsonEncode(<String, String>{
+                          "user": "1",
+                          "vehicle": "3",
+                          "parking_spot": "Spot B",
+                          "entry_time": iso8601string_start,
+                          "exit_time": iso8601string_end
+                        }));
+                    if (postResponse.statusCode == 201) {
+                      print("Parking Spot booked successfully");
+                      const snackBar = SnackBar(
+                        content: Text(
+                          "Spot Booked Successfully",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        backgroundColor: Colors.green,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      print('Booking Unsccessful');
+                      print(starttime.format(context));
+                      print(endtime.format(context));
+                      print(starttime.toString());
+                      print(endtime.toString());
+                    }
+                  },
                   child: Text('Book Now',
                       style: TextStyle(color: Color(0xffCCE9F2), fontSize: 20)),
                 ),
