@@ -47,6 +47,7 @@ dependencies:
   open_route_service: ^1.2.2
   shared_preferences: ^2.0.18
   geocoding: ^2.0.5
+  get: ^4.6.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
