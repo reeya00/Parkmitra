@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_declarations
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
@@ -41,6 +42,9 @@ void loginUser(String username, String password, Function() onSucess) async {
     Globals.access_token = responseData['access'];
     final temp = 'Bearer ' + Globals.access_token;
     final username = responseData['username'];
+
+    Get.snackbar('Sucess', 'Logged In');
+
     // Globals.user_name = responseData['username'];
     print(username);
     print(Globals.user_name);
@@ -59,19 +63,12 @@ void loginUser(String username, String password, Function() onSucess) async {
   } else {
     // User is not authenticated
     // print('User not authenticated');
+    Get.snackbar('Error', 'Log In Failed');
     final Map<String, dynamic> responseData = json.decode(response.body);
     final String errorMessage = responseData['detail'];
     throw Exception(errorMessage);
   }
 }
-
-void showSnackBar(BuildContext context, String message) {
-  final snackBar = SnackBar(
-    content: Text(message),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-}
-
 
 class LoginScree extends StatefulWidget {
   const LoginScree({super.key});
@@ -155,8 +152,8 @@ class _LoginScreeState extends State<LoginScree> {
               // CircularProgressIndicator();
             }
             else{
-              showSnackBar(context, 'Wrong Credentials');
-          }
+             Get.snackbar('Error', 'Wrong Credentials');
+            }
           },
           padding: const EdgeInsets.all(20),
           child:

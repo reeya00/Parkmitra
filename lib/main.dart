@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:parkmitra/screens/current_location.dart';
-import 'package:parkmitra/screens/home_screen.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:parkmitra/screens/login.dart';
 import 'package:parkmitra/screens/login_screen.dart';
 import 'package:parkmitra/screens/nav_bar.dart';
-import 'package:parkmitra/screens/osmtry.dart';
-import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScree(),
+      home: Scaffold(
+        body: Container(
+          child: LoginScree() as Widget,
+        ),
+      ),
     );
   }
 }

@@ -1,143 +1,133 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'login.dart';
-import 'login_screen.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:parkmitra/screens/home_screen.dart';
+import 'login.dart';
 
-Future<http.Response> createUser(
-    String username, String password, String email) async {
-  final response = await http.post(
-    Uri.parse('http://127.0.0.1:8000/user/register/'), //use this for web
-    // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
-    // Uri.http("localhost:8000", "/user/register/"),
-    // Uri.parse('http://192.168.0.1:8000/user/register/'),
-
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'username': username,
-      'password': password,
-      'email': email,
-      'is_active': 'true'
-    }),
-  );
-  return response;
-}
-
-TextStyle myStyle = const TextStyle(fontSize: 15);
-final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class SigninController extends GetxController {
+  late TextEditingController usernameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  final formKey = GlobalKey<FormState>();
 
   @override
-  State<SigninScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<SigninScreen> {
-  late String username;
-  late String email;
-  late String password;
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-
-  @override
-  void dispose() {
-    super.dispose();
-    usernameController.dispose();
-    passwordController.dispose();
-    emailController.dispose();
+  void onInit() {
+    super.onInit();
+    usernameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
   }
+
+  void createUser() async {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8000/user/register/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': usernameController.text,
+        'password': passwordController.text,
+        'email': emailController.text,
+        'is_active': 'true',
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      print("sucessfully signed in");
+      Get.to(() => LoginScree());
+    } else {
+      print("error");
+      // Get.snackbar(
+      //   "Error",
+      //   "An error occurred while registering. Please try again later.",
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
+    }
+  }
+}
+
+class SigninScreen extends StatelessWidget {
+  final signinController = Get.put(SigninController());
 
   @override
   Widget build(BuildContext context) {
     final usernameField = TextFormField(
-      controller: usernameController,
+      controller: signinController.usernameController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Username is required";
         }
         return null;
       },
-      onSaved: (String? val) {
-        username = val!;
-      },
-      style: myStyle,
+      onSaved: (String? val) {},
+      style: const TextStyle(fontSize: 15),
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(10),
-          hintText: "Username",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
+        contentPadding: const EdgeInsets.all(10),
+        hintText: "Username",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+      ),
     );
 
     final emailField = TextFormField(
-      controller: emailController,
+      controller: signinController.emailController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Email is required";
         }
         return null;
       },
-      onChanged: (val) {
-        setState(() {
-          email = val;
-        });
-      },
-      style: myStyle,
+      onChanged: (val) {},
+      style: const TextStyle(fontSize: 15),
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(10),
-          hintText: "Email",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
+        contentPadding: const EdgeInsets.all(10),
+        hintText: "Email",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+      ),
     );
 
     final passwordField = TextFormField(
-      controller: passwordController,
+      controller: signinController.passwordController,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return "Password is required";
         }
         return null;
       },
-      onChanged: (val) {
-        setState(() {
-          password = val;
-        });
-      },
+      onChanged: (val) {},
       obscureText: true,
-      style: myStyle,
+      style: const TextStyle(fontSize: 15),
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(10),
-          hintText: "Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
+        contentPadding: const EdgeInsets.all(10),
+        hintText: "Password",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+      ),
     );
 
     final loginbutton = Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(30.0),
-        color: const Color(0xff222651),
-        child: MaterialButton(
-          minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
-            if (_formkey.currentState!.validate()) {
-              createUser(usernameController.text, passwordController.text,
-                  emailController.text);
-              _formkey.currentState!.save();
+      elevation: 5.0,
+      borderRadius: BorderRadius.circular(30.0),
+      color: const Color(0xff222651),
+      child: MaterialButton(
+        minWidth: MediaQuery.of(context).size.width,
+        onPressed: () {
+          if (signinController.formKey.currentState!.validate()) {
+            signinController.createUser();
+          }
+        },
+        padding: const EdgeInsets.all(20),
+        child: const Text(
+          'Sign Up',
+          style: TextStyle(color: Color(0xffCCE9F2)),
+        ),
+      ),
+    );
 
-              // print(username);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginScree()));
-            }
-          },
-          padding: const EdgeInsets.all(20),
-          child:
-              const Text('Sign Up', style: TextStyle(color: Color(0xffCCE9F2))),
-        ));
     return Scaffold(
       body: Center(
           child: Form(
-        key: _formkey,
+        key: signinController.formKey,
         child: Container(
             color: const Color(0xff0078B7),
             child: Padding(
@@ -160,12 +150,7 @@ class _LoginScreenState extends State<SigninScreen> {
                     height: 20,
                   ),
                   TextButton(
-                      onPressed: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginScree()))
-                          },
+                      onPressed: () => {Get.to(() => LoginScree())},
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         // ignore: prefer_const_literals_to_create_immutables
@@ -192,12 +177,3 @@ class _LoginScreenState extends State<SigninScreen> {
     );
   }
 }
-
-// create a Map object with user data
-Map<String, dynamic> userData = {
-  'username': 'john_doe',
-  'email': 'john.doe@example.com',
-  'password': 'password123'
-};
-
-String jsonUserData = jsonEncode(userData);

@@ -1,19 +1,23 @@
-// // ignore_for_file: unnecessary_const
+// // ignore_for_file: prefer_const_declarations
 
 // import 'package:flutter/material.dart';
-// import 'package:parkmitra/screens/home_screen.dart';
 // import 'package:parkmitra/screens/signin_screen.dart';
 // import 'nav_bar.dart';
 // import 'dart:convert';
 // import 'package:http/http.dart' as http;
-// import 'package:shared_preferences/shared_preferences.dart';
+
+// //use cubit for state management
+// class Globals {
+//   static String refresh_token = '';
+//   static String access_token = '';
+//   static String user_name = '';
+// }
 
 // TextStyle myStyle = const TextStyle(fontSize: 15);
 // final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 // bool loggedin = false;
 
-// //Future<Map<String, dynamic>>
-// void loginUser(String username, String password) async {
+// void loginUser(String username, String password, Function() onSucess) async {
 //   final response = await http.post(
 //     Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
 //     // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
@@ -30,42 +34,68 @@
 //   );
 //   if (response.statusCode == 200) {
 //     // User is authenticated
-//     print('User authenticated');
-//     loggedin = true;
+//     // print('User authenticated');
+
 //     final Map<String, dynamic> responseData = json.decode(response.body);
-//     final refresh_token = responseData['refresh'];
-//     final access_token = responseData['access'];
+//     Globals.refresh_token = responseData['refresh'];
+//     Globals.access_token = responseData['access'];
+//     final temp = 'Bearer ' + Globals.access_token;
 //     final username = responseData['username'];
-//     // print("$username, $password, $refresh_token");
-//     // storeTokens(refresh_token, access_token);
-//     // return {
-//     //   'refresh_token': responseData['refresh'],
-//     //   'access_token': responseData['access'],
-//     //   'username': username
-//     // };
+//     // Globals.user_name = responseData['username'];
+//     print(username);
+//     print(Globals.user_name);
+//     // print(fetchUserData());
+//     final patchResponse = await http.patch(
+//         Uri.parse('http://127.0.0.1:8000/user/update/'),
+//         headers: <String, String>{
+//           'Content-Type': 'application/json; charset=UTF-8',
+//           'Authorization': temp
+//         },
+//         body: jsonEncode(<String, String>{
+//           'refresh_token': Globals.refresh_token,
+//           'access_token': Globals.access_token,
+//         }));
+//     onSucess();
 //   } else {
 //     // User is not authenticated
 //     // print('User not authenticated');
 //     final Map<String, dynamic> responseData = json.decode(response.body);
 //     final String errorMessage = responseData['detail'];
+//     throw Exception(errorMessage);
 //   }
 // }
 
-// class LoginScreen extends StatefulWidget {
-//   const LoginScreen({super.key});
-
-//   @override
-//   State<LoginScreen> createState() => _LoginScreenState();
+// void showSnackBar(BuildContext context, String message) {
+//   final snackBar = SnackBar(
+//     content: Text(message),
+//   );
+//   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 // }
 
-// class _LoginScreenState extends State<LoginScreen> {
+
+// class LoginScree extends StatefulWidget {
+//   const LoginScree({super.key});
+
+//   @override
+//   State<LoginScree> createState() => _LoginScreeState();
+// }
+
+// class _LoginScreeState extends State<LoginScree> {
 //   late String username;
 //   late String password;
 //   final TextEditingController usernameController = TextEditingController();
 //   final TextEditingController passwordController = TextEditingController();
 
 //   @override
+//   void dispose() {
+//     super.dispose();
+//     usernameController.dispose();
+//     passwordController.dispose();
+//   }
+
+//   @override
 //   Widget build(BuildContext context) {
+//     //usernamefield
 //     final usernameField = TextFormField(
 //       controller: usernameController,
 //       validator: (String? value) {
@@ -74,10 +104,8 @@
 //         }
 //         return null;
 //       },
-//       onSaved: (val) {
-//         (String? val) {
-//           username = val!;
-//         };
+//       onSaved: (String? val) {
+//         username = val!;
 //       },
 //       style: myStyle,
 //       decoration: InputDecoration(
@@ -86,6 +114,7 @@
 //           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
 //     );
 
+//     //passwordfield
 //     final passwordField = TextFormField(
 //       controller: passwordController,
 //       validator: (String? value) {
@@ -114,24 +143,20 @@
 //         child: MaterialButton(
 //           minWidth: MediaQuery.of(context).size.width,
 //           onPressed: () {
-//             //   if (_formkey.currentState!.validate()) {
-//             //   loginUser(usernameController.text, passwordController.text,);
-//             //   _formkey.currentState!.save();
-//             //   Navigator.push(
-//             //     context, MaterialPageRoute(builder: (context) => NavBar()));
+//             if (_formkey.currentState!.validate()) {
+//               loginUser(usernameController.text, passwordController.text, () {
+//                 Navigator.push(
+//                     context, MaterialPageRoute(builder: (context) => NavBar()));
+//                 _formkey.currentState!.save();
+//               });
+//               // Future.delayed(Duration(seconds: 10));
 
-//             // }
 
-//             loginUser(
-//               usernameController.text,
-//               passwordController.text,
-//             );
-//             // ignore: avoid_print
-//             print(loggedin);
-//             // if(loggedin = true){
-//             //   Navigator.push(
-//             //     context, MaterialPageRoute(builder: (context) => NavBar()));
-//             // }
+//               // CircularProgressIndicator();
+//             }
+//             else{
+//               showSnackBar(context, 'Wrong Credentials');
+//           }
 //           },
 //           padding: const EdgeInsets.all(20),
 //           child:
@@ -139,54 +164,57 @@
 //         ));
 //     return Scaffold(
 //       body: Center(
-//           child: Container(
-//               color: const Color(0xff0078B7),
-//               child: Padding(
-//                 padding: const EdgeInsets.all(20),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   crossAxisAlignment: CrossAxisAlignment.center,
-//                   children: [
-//                     const SizedBox(height: 20),
-//                     Image.asset('assets/images/logo.png', scale: 10),
-//                     const SizedBox(height: 20),
-//                     usernameField,
-//                     const SizedBox(height: 20),
-//                     passwordField,
-//                     const SizedBox(height: 20),
-//                     loginbutton,
-//                     const SizedBox(
-//                       height: 20,
-//                     ),
-//                     TextButton(
-//                         onPressed: () => {
-//                               Navigator.push(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                       builder: (context) => SigninScreen()))
-//                             },
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           // ignore: prefer_const_literals_to_create_immutables
-//                           children: [
-//                             const Text(
-//                               "Don't have an account? ",
-//                               style: const TextStyle(
-//                                   fontSize: 15, color: const Color(0xff222651)),
-//                             ),
-//                             const Text(
-//                               "Sign Up",
-//                               style: const TextStyle(
-//                                   fontSize: 15,
-//                                   fontWeight: FontWeight.bold,
-//                                   color: const Color(0xff222651),
-//                                   decoration: TextDecoration.underline),
-//                             )
-//                           ],
-//                         ))
-//                   ],
-//                 ),
-//               ))),
+//           child: Form(
+//         key: _formkey,
+//         child: Container(
+//             color: const Color(0xff0078B7),
+//             child: Padding(
+//               padding: const EdgeInsets.all(20),
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: [
+//                   const SizedBox(height: 20),
+//                   Image.asset('assets/images/logo.png', scale: 10),
+//                   const SizedBox(height: 20),
+//                   usernameField,
+//                   const SizedBox(height: 20),
+//                   passwordField,
+//                   const SizedBox(height: 20),
+//                   loginbutton,
+//                   const SizedBox(
+//                     height: 20,
+//                   ),
+//                   TextButton(
+//                       onPressed: () => {
+//                             Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                     builder: (context) => SigninScreen()))
+//                           },
+//                       child: Row(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         // ignore: prefer_const_literals_to_create_immutables
+//                         children: [
+//                           const Text(
+//                             "Don't have an account? ",
+//                             style: const TextStyle(
+//                                 fontSize: 15, color: const Color(0xff222651)),
+//                           ),
+//                           const Text(
+//                             "Sign Up",
+//                             style: const TextStyle(
+//                                 fontSize: 15,
+//                                 fontWeight: FontWeight.bold,
+//                                 color: const Color(0xff222651),
+//                                 decoration: TextDecoration.underline),
+//                           )
+//                         ],
+//                       ))
+//                 ],
+//               ),
+//             )),
+//       )),
 //     );
 //   }
 // }

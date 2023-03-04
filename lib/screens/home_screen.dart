@@ -1,53 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:parkmitra/screens/current_location.dart';
-import 'package:parkmitra/screens/nav_bar.dart';
-import 'package:parkmitra/screens/osmtry.dart';
+import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
 import 'retriever.dart';
 import 'active_screen.dart';
 import 'login.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeController extends GetxController {
+  final userData = Rxn<Map<String, dynamic>>();
+
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  void onInit() {
+    super.onInit();
+    fetchUserData().then((data) => userData.value = data);
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  late Future<Map<String, dynamic>> userData;
-  bool reload = false;
-
-  @override
-  void initState() {
-    super.initState();
-    userData = fetchUserData();
-  }
+class HomeScreen extends StatelessWidget {
+  final controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FutureBuilder<Map<String, dynamic>>(
-          future: userData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text(
-                snapshot.data!['username'],
-                style: const TextStyle(fontSize: 25),
-              );
-            } else if (snapshot.hasError) {
-              // Reload the HomeScreen if an error occurs
-              Future.delayed(Duration(milliseconds: 500)).then((_) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => NavBar()));
-              });
-              return const Text("Error loading user data");
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ),
+        title: Obx(() {
+          final data = controller.userData.value;
+          if (data != null) {
+            return Text(
+              data['username'],
+              style: const TextStyle(fontSize: 25),
+            );
+          } else if (data == null) { // Use the rx getter for hasError
+            return const Text("Error loading user data");
+          } else {
+            return const CircularProgressIndicator();
+          }
+        }),
         automaticallyImplyLeading: false,
       ),
       body: Stack(
