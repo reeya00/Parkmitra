@@ -11,15 +11,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-0&cqk2&vn-+9sv!wcrn5g68-h(x_sq)ax4(3mtg0p&-op8338b'
-SECRET_KEY = os.environ.get("PARKMITRA_SECRET_KEY", "DJANGO_INSECURE_KEY")
+SECRET_KEY = 'django-insecure-0&cqk2&vn-+9sv!wcrn5g68-h(x_sq)ax4(3mtg0p&-op8338b'
+# SECRET_KEY = os.environ.get("PARKMITRA_SECRET_KEY", "DJANGO_INSECURE_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("PARKMITRA_DEBUG","False") == "True"
+# DEBUG = os.environ.get("PARKMITRA_DEBUG","False") == "True"
+DEBUG = True
 
-
-# ALLOWED_HOSTS = ['192.168.0.243', '10.0.2.2', '127.0.0.1', 'localhost']
-ALLOWED_HOSTS = os.environ.get("PARKMITRA_ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = ['192.168.0.243', '10.0.2.2', '127.0.0.1', 'localhost', 'https://young-lemons-wish-202-166-220-78.loca.lt']
+# ALLOWED_HOSTS = os.environ.get("PARKMITRA_ALLOWED_HOSTS", "*").split(",")
 
 
 # Application definition
@@ -139,12 +139,12 @@ REST_FRAMEWORK = {
     ),
     'JWT_AUTH_COOKIE': 'access_token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
-
+    'DATETIME_FORMAT': '%s000',
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
@@ -171,8 +171,8 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+    "SLIDING_TOKEN_LIFETIME": timedelta(days=1),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=30),
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
