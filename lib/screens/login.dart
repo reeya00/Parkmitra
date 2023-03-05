@@ -6,6 +6,8 @@ import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 //use cubit for state management
 class Globals {
@@ -68,6 +70,13 @@ void loginUser(String username, String password, Function() onSucess) async {
     final String errorMessage = responseData['detail'];
     throw Exception(errorMessage);
   }
+}
+
+void writeUserDataToHive() {
+  var userBox = Hive.box('user');
+  //request the data related to the user
+
+  //assign the obtained values to the hive box
 }
 
 class LoginScree extends StatefulWidget {
@@ -142,17 +151,15 @@ class _LoginScreeState extends State<LoginScree> {
           onPressed: () {
             if (_formkey.currentState!.validate()) {
               loginUser(usernameController.text, passwordController.text, () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => NavBar()));
+                Get.to(() => NavBar());
                 _formkey.currentState!.save();
+                writeUserDataToHive();
               });
               // Future.delayed(Duration(seconds: 10));
 
-
               // CircularProgressIndicator();
-            }
-            else{
-             Get.snackbar('Error', 'Wrong Credentials');
+            } else {
+              Get.snackbar('Error', 'Wrong Credentials');
             }
           },
           padding: const EdgeInsets.all(20),
@@ -183,12 +190,7 @@ class _LoginScreeState extends State<LoginScree> {
                     height: 20,
                   ),
                   TextButton(
-                      onPressed: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SigninScreen()))
-                          },
+                      onPressed: () => {Get.to(() => SigninScreen())},
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         // ignore: prefer_const_literals_to_create_immutables
