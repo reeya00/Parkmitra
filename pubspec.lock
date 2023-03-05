@@ -65,7 +65,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.3"
-<<<<<<< HEAD
   build_config:
     dependency: transitive
     description:
@@ -122,8 +121,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.4.4"
-=======
->>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   characters:
     dependency: transitive
     description:
@@ -132,7 +129,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
-<<<<<<< HEAD
   checked_yaml:
     dependency: transitive
     description:
@@ -141,8 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-=======
->>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   cli_util:
     dependency: transitive
     description:
@@ -280,10 +274,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_map_marker_popup
-      sha256: "9eb13384fb217d446398f8de484a70d668ab986485ce75bb3adf5e853a1d8b8a"
+      sha256: b83e11dd8611f27d02050de3f262fac8eeb888abb5e562113b3be578573914f2
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   flutter_polyline_points:
     dependency: "direct main"
     description:
@@ -666,10 +660,10 @@ packages:
     dependency: transitive
     description:
       name: plugin_platform_interface
-      sha256: dbf0f707c78beedc9200146ad3cb0ab4d5da13c246336987be6940f026500d3a
+      sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   polylabel:
     dependency: transitive
     description:
@@ -726,7 +720,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
-<<<<<<< HEAD
   pubspec_parse:
     dependency: transitive
     description:
@@ -735,8 +728,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.8"
-=======
->>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   shared_preferences:
     dependency: "direct main"
     description:
@@ -934,7 +925,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-<<<<<<< HEAD
   web_socket_channel:
     dependency: transitive
     description:
@@ -943,8 +933,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-=======
->>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   win32:
     dependency: transitive
     description:
