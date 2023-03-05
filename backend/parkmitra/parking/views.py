@@ -1,9 +1,6 @@
 from .serializer import VehicleSerializer, VehicleSerializer1, AddVehicleSerializer, ParkingSessionSerializer
 from .models import Vehicle, ParkingSession
-from rest_framework import viewsets, permissions, status, generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from rest_framework import permissions, generics
 
 class VehicleRetrieve(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vehicle.objects.all()
@@ -65,4 +62,3 @@ class CreateSession(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = ParkingSession.objects.all()
     serializer_class = ParkingSessionSerializer
-

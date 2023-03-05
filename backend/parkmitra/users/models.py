@@ -1,7 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db import models
+from ..parking.models import ParkingSession, Vehicle
 
 class CustomUser(AbstractUser):
-    access_token = models.CharField(max_length=256, null=True, blank=True)
-    refresh_token = models.CharField(max_length=256, null=True, blank=True)
+    sessions = models.ManyToManyField(ParkingSession, blank=True)
+    vehicles = models.ManyToManyField(Vehicle, blank=True)
+    

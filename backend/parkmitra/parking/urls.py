@@ -7,5 +7,4 @@ urlpatterns = [
     path("addvehicle/", AddVehicle.as_view()),
     path("sessions/", ListSession.as_view()),
     path("sessions/add", CreateSession.as_view()),
-    
 ]

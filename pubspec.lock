@@ -65,6 +65,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.3"
+<<<<<<< HEAD
   build_config:
     dependency: transitive
     description:
@@ -121,6 +122,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.4.4"
+=======
+>>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   characters:
     dependency: transitive
     description:
@@ -129,6 +132,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+<<<<<<< HEAD
   checked_yaml:
     dependency: transitive
     description:
@@ -137,6 +141,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+=======
+>>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   cli_util:
     dependency: transitive
     description:
@@ -720,6 +726,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+<<<<<<< HEAD
   pubspec_parse:
     dependency: transitive
     description:
@@ -728,6 +735,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.8"
+=======
+>>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   shared_preferences:
     dependency: "direct main"
     description:
@@ -925,6 +934,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+<<<<<<< HEAD
   web_socket_channel:
     dependency: transitive
     description:
@@ -933,6 +943,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+=======
+>>>>>>> 8b777c02b68db839e558b249ca5a68a324aba2fe
   win32:
     dependency: transitive
     description:
