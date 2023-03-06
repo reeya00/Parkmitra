@@ -6,14 +6,25 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'login.dart';
+import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class ParkinglotScreen extends StatefulWidget {
-  const ParkinglotScreen({super.key});
-  @override
-  State<ParkinglotScreen> createState() => _ParkinglotScreenState();
+Future<void> writeParkinglotDataToHive() async {
+  final response =
+      await http.get(Uri.parse('http://127.0.0.1:8000/parkmitra/parkinglots/'));
+  
+
+  if (response.statusCode == 200) {
+    final parkinglotBox = await Hive.box('parkingLot');
+    final data = json.decode(response.body);
+    await parkinglotBox.put('data', data);
+  } else {
+    throw Exception('Failed to load data');
+  }
 }
 
-class _ParkinglotScreenState extends State<ParkinglotScreen> {
+class ParkinglotController extends GetxController {
   Color _containercolor = Colors.blue;
   //for dropdown
   var items = ['Activa Scooter', 'Hyundai Car', 'Yatri BIke'];
@@ -52,13 +63,18 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
   }
 
   @override
-  void initState() {
+  void onInit() {
     entrytimeinput.text = "";
     exittimeinput.text = "";
-
-    super.initState();
+    super.onInit();
+    writeParkinglotDataToHive();
   }
+}
 
+class ParkinglotScreen extends StatelessWidget {
+  final parkinglotController = Get.put(ParkinglotController());
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -114,226 +130,157 @@ class _ParkinglotScreenState extends State<ParkinglotScreen> {
               flex: 6,
               child: Container(
                 color: Colors.blue.shade100,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Book Parking Spot',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          RawMaterialButton(
-                            onPressed: () {},
-                            elevation: 2.0,
-                            fillColor: Colors.blue,
-                            child: Icon(
-                              Icons.two_wheeler_rounded,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                            padding: EdgeInsets.all(15.0),
-                            shape: CircleBorder(),
-                          ),
-                          RawMaterialButton(
-                            onPressed: () {},
-                            elevation: 2.0,
-                            fillColor: Colors.blue,
-                            child: Icon(
-                              Icons.directions_car_rounded,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                            padding: EdgeInsets.all(15.0),
-                            shape: CircleBorder(),
-                          ),
-                          DropdownButton(
-                            // Initial Value
-                            value: dropdownvalue,
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            items: items.map((String items) {
-                              return DropdownMenuItem(
-                                value: items,
-                                child: Text(items),
-                              );
-                            }).toList(),
-                            // After selecting the desired option,it will
-                            // change button value to selected value
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                dropdownvalue = newValue!;
-                              });
-                            },
-                          ),
-                        ]),
-                    Container(
-                      padding: EdgeInsets.all(15),
-                      // height: 150,
-                      child: Center(
-                          child: Column(
+                      Text(
+                        'Book a Spot',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Select a Vehicle',
+                        style: TextStyle(
+                            fontSize: 12, color: Colors.black.withOpacity(0.8)),
+                      ),
+                      DropdownButton(
+                        value: parkinglotController.dropdownvalue,
+                        items: parkinglotController.items
+                            .map((String items) => DropdownMenuItem(
+                                  value: items,
+                                  child: Text(
+                                    items,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (String? newvalue) {
+                          parkinglotController.dropdownvalue = newvalue!;
+                          parkinglotController.update();
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      Row(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: TextField(
-                                    controller: entrytimeinput,
-                                    decoration: InputDecoration(
-                                        icon: Icon(Icons.timer),
-                                        labelText: "Entry Time"),
-                                    readOnly: true,
-                                    onTap: () async {
-                                      TimeOfDay? entryTime =
-                                          await showTimePicker(
-                                        initialTime: TimeOfDay.now(),
-                                        context: context,
-                                      );
-                                      if (entryTime != null) {
-                                        setState(() {
-                                          entrytimeinput.text =
-                                              entryTime.format(context);
-                                          // starttime = TimeOfDay(
-                                          //     hour: int.parse(entrytimeinput
-                                          //         .text
-                                          //         .split(':')[0]),
-                                          //     minute: int.parse(entrytimeinput
-                                          //         .text
-                                          //         .split(':')[1]));
-                                          starttime = entryTime;
-                                          print("start $starttime");
-                                          calcdifference = findTimeDifference(
-                                              starttime, endtime);
-                                        });
-                                      }
-                                    }),
-                              ),
-                              SizedBox(
-                                width: 200,
-                                child: TextField(
-                                    controller: exittimeinput,
-                                    decoration: InputDecoration(
-                                        icon: Icon(Icons.timer_off),
-                                        labelText: "Exit Time"),
-                                    readOnly: true,
-                                    onTap: () async {
-                                      TimeOfDay? exitTime =
-                                          await showTimePicker(
-                                        initialTime: TimeOfDay.now(),
-                                        context: context,
-                                      );
-                                      if (exitTime != null) {
-                                        setState(() {
-                                          exittimeinput.text =
-                                              exitTime.format(context);
-                                          // endtime = TimeOfDay(
-                                          //     hour: int.parse(exittimeinput.text
-                                          //         .split(':')[0]),
-                                          //     minute: int.parse(exittimeinput
-                                          //         .text
-                                          //         .split(':')[1]));
-                                          endtime = exitTime;
-                                          print("end $endtime");
-                                          // print(starttime);
-                                          calcdifference = findTimeDifference(
-                                              starttime, endtime);
-                                        });
-                                      }
-                                    }),
-                              ),
-                            ],
+                          Text(
+                            'Entry Time',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12),
                           ),
                           SizedBox(
-                            height: 80,
+                            width: 182,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text('Duration $calcdifference',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              Text('Price Rs. $price',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold))
-                            ],
+                          Text(
+                            'Exit Time',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12),
                           ),
                         ],
-                      )),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                width: 400,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                    ),
-                    backgroundColor: Colors.blue,
-                  ),
-                  onPressed: () async {
-                    print('onpressed clicked book');
-                    final temp = 'Bearer ' + Globals.access_token;
-                    DateTime now = DateTime.now();
-                    DateTime dateTime_start = DateTime(now.year, now.month,
-                        now.day, starttime.hour, starttime.minute);
-                    String iso8601string_start =
-                        dateTime_start.toIso8601String();
-                    DateTime dateTime_end = DateTime(now.year, now.month,
-                        now.day, endtime.hour, endtime.minute);
-                    String iso8601string_end = dateTime_end.toIso8601String();
-                    final postResponse = await http.post(
-                        Uri.parse(
-                            'http://127.0.0.1:8000/parkmitra/sessions/add'),
-                        headers: <String, String>{
-                          'Content-Type': 'application/json; charset=UTF-8',
-                          'Authorization': temp
-                        },
-                        body: jsonEncode(<String, String>{
-                          "user": "1",
-                          "vehicle": "3",
-                          "parking_spot": "Spot B",
-                          "entry_time": iso8601string_start,
-                          "exit_time": iso8601string_end
-                        }));
-                    if (postResponse.statusCode == 201) {
-                      print("Parking Spot booked successfully");
-                      const snackBar = SnackBar(
-                        content: Text(
-                          "Spot Booked Successfully",
-                          style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: TextFormField(
+                            controller: parkinglotController.entrytimeinput,
+                            onTap: () async {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              final picked = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (picked != null) {
+                                parkinglotController.starttime = picked;
+                                parkinglotController.entrytimeinput.text =
+                                    DateFormat('HH:mm').format(DateTime(2023,
+                                        03, 05, picked.hour, picked.minute));
+                                parkinglotController.update();
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Enter Entry Time',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.timer),
+                            ),
+                          )),
+                          // SizedBox(height: 20),
+
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                              child: TextFormField(
+                            controller: parkinglotController.exittimeinput,
+                            onTap: () async {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              final picked = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (picked != null) {
+                                parkinglotController.endtime = picked;
+                                parkinglotController.exittimeinput.text =
+                                    DateFormat('HH:mm').format(DateTime(2023,
+                                        03, 05, picked.hour, picked.minute));
+                                parkinglotController.calcdifference =
+                                    parkinglotController.findTimeDifference(
+                                        parkinglotController.starttime,
+                                        parkinglotController.endtime);
+                                parkinglotController.update();
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Enter Exit Time',
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.timer),
+                            ),
+                          )),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Time Difference: ${parkinglotController.calcdifference}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Price: Rs. ${parkinglotController.price.toStringAsFixed(2)}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      SizedBox(height: 90),
+                      Expanded(
+                          child: Container(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+                        width: 400,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            backgroundColor: Colors.blue,
+                          ),
+                          onPressed: () {
+                            // Book Parking Lot
+                          },
+                          child: Text(
+                            'Book',
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
-                        backgroundColor: Colors.green,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    } else {
-                      print('Booking Unsccessful');
-                      print(starttime.format(context));
-                      print(endtime.format(context));
-                      print(starttime.toString());
-                      print(endtime.toString());
-                    }
-                  },
-                  child: Text('Book Now',
-                      style: TextStyle(color: Color(0xffCCE9F2), fontSize: 20)),
+                      ))
+                    ],
+                  ),
                 ),
               ),
             ),

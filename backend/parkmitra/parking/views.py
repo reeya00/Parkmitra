@@ -1,5 +1,6 @@
-from .serializer import VehicleSerializer, VehicleSerializer1, AddVehicleSerializer, ParkingSessionSerializer, ParkingLotSerializer
+from .serializer import VehicleSerializer, VehicleSerializer1, AddVehicleSerializer, ParkingSessionSerializer, ParkingLotSerializer, UserSerializer
 from .models import Vehicle, ParkingSession, ParkingLot
+from ..users.models import CustomUser
 from rest_framework import permissions, generics
 
 class VehicleRetrieve(generics.RetrieveUpdateDestroyAPIView):
@@ -39,7 +40,7 @@ class VehicleList(generics.ListAPIView):
 class AddVehicle(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = AddVehicleSerializer
-
+    
 
     # def post(self, request):
     #     vehicle_serializer = AddVehicleSerializer(data=request.data)
@@ -67,3 +68,10 @@ class ListParkingLots(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ParkingLotSerializer
     queryset = ParkingLot.objects.all()
+
+class UserDetailView(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+    queryset = CustomUser.objects.all()
+    def get_object(self):
+        return self.request.user

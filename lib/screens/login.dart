@@ -37,34 +37,20 @@ void loginUser(String username, String password, Function() onSucess) async {
   );
   if (response.statusCode == 200) {
     // User is authenticated
-    // print('User authenticated');
-
+    print('User authenticated');
     final Map<String, dynamic> responseData = json.decode(response.body);
-    Globals.refresh_token = responseData['refresh'];
-    Globals.access_token = responseData['access'];
+    await Hive.openBox('userBox');
+    var userBox = Hive.box('userBox');
+    userBox.put('accessToken', responseData['access']);
+    userBox.put('refreshToken', responseData['refresh']);
+    print(userBox.get('accessToken'));
+    print(userBox.get('refreshToken'));
     final temp = 'Bearer ' + Globals.access_token;
-    final username = responseData['username'];
-
     Get.snackbar('Sucess', 'Logged In');
-
-    // Globals.user_name = responseData['username'];
-    print(username);
-    print(Globals.user_name);
-    // print(fetchUserData());
-    final patchResponse = await http.patch(
-        Uri.parse('http://127.0.0.1:8000/user/update/'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': temp
-        },
-        body: jsonEncode(<String, String>{
-          'refresh_token': Globals.refresh_token,
-          'access_token': Globals.access_token,
-        }));
     onSucess();
   } else {
     // User is not authenticated
-    // print('User not authenticated');
+    print('User not authenticated');
     Get.snackbar('Error', 'Log In Failed');
     final Map<String, dynamic> responseData = json.decode(response.body);
     final String errorMessage = responseData['detail'];
@@ -72,11 +58,29 @@ void loginUser(String username, String password, Function() onSucess) async {
   }
 }
 
-void writeUserDataToHive() {
-  var userBox = Hive.box('user');
-  //request the data related to the user
-
-  //assign the obtained values to the hive box
+Future<void> writeUserDataToHive() async {
+  await Hive.openBox('userBox');
+  final box = Hive.box('userBox');
+  final response = await http.get(
+      Uri.parse('http://127.0.0.1:8000/parkmitra/userdata/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ' + box.get('accessToken')
+      });
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    box.put('id', responseData['id']);
+    box.put('username', responseData['username']);
+    box.put('firstName', responseData['firstName']);
+    box.put('lastName', responseData['lastName']);
+    box.put('email', responseData['email']);
+    box.put('email', responseData['email']);
+    box.put('isActive', responseData['isActive']);
+    box.put('vehicle', responseData['vehicle']);
+    box.put('session', responseData['session']);
+  } else {
+    throw Exception('Failed to load data');
+  }
 }
 
 class LoginScree extends StatefulWidget {
@@ -151,9 +155,9 @@ class _LoginScreeState extends State<LoginScree> {
           onPressed: () {
             if (_formkey.currentState!.validate()) {
               loginUser(usernameController.text, passwordController.text, () {
+                writeUserDataToHive();
                 Get.to(() => NavBar());
                 _formkey.currentState!.save();
-                writeUserDataToHive();
               });
               // Future.delayed(Duration(seconds: 10));
 

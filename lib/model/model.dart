@@ -19,6 +19,10 @@ class User extends HiveObject {
   final Map vehicle;
   @HiveField(7)
   final Map session;
+  @HiveField(8)
+  final String accessToken;
+  @HiveField(9)
+  final String refreshToken;
   User(
       {required this.id,
       required this.username,
@@ -27,7 +31,10 @@ class User extends HiveObject {
       required this.email,
       required this.isActive,
       required this.vehicle,
-      required this.session});
+      required this.session,
+      required this.accessToken,
+      required this.refreshToken
+      });
 }
 
 @HiveType(typeId: 1)
