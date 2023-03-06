@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import VehicleRetrieve, VehicleList, AddVehicle, ListSession, CreateSession
+from .views import VehicleRetrieve, VehicleList, AddVehicle, ListSession, CreateSession, ListParkingLots
 
 urlpatterns = [
     path("vehicle/", VehicleList.as_view()),
@@ -7,4 +7,5 @@ urlpatterns = [
     path("addvehicle/", AddVehicle.as_view()),
     path("sessions/", ListSession.as_view()),
     path("sessions/add", CreateSession.as_view()),
+    path("parkinglots/", ListParkingLots.as_view()),
 ]

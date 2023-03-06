@@ -1,5 +1,5 @@
-from .serializer import VehicleSerializer, VehicleSerializer1, AddVehicleSerializer, ParkingSessionSerializer
-from .models import Vehicle, ParkingSession
+from .serializer import VehicleSerializer, VehicleSerializer1, AddVehicleSerializer, ParkingSessionSerializer, ParkingLotSerializer
+from .models import Vehicle, ParkingSession, ParkingLot
 from rest_framework import permissions, generics
 
 class VehicleRetrieve(generics.RetrieveUpdateDestroyAPIView):
@@ -62,3 +62,8 @@ class CreateSession(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = ParkingSession.objects.all()
     serializer_class = ParkingSessionSerializer
+
+class ListParkingLots(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ParkingLotSerializer
+    queryset = ParkingLot.objects.all()

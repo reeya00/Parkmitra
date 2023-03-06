@@ -20,13 +20,6 @@ class Vehicle(models.Model):
     
     def __str__(self):
         return f"{self.vehicle_model} {self.plate_number}"
-
-class Location(models.Model):
-    lat = models.FloatField()
-    long = models.FloatField()
-    
-    def __str__(self) -> str:
-        return f"{self.lat},{self.long}"
     
 class ParkingSpace(models.Model):
     # parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE)
@@ -40,14 +33,15 @@ class ParkingSpace(models.Model):
     
 class ParkingLot(models.Model):
     lot_name = models.CharField(max_length=32)
-    lot_location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
+    lat = models.FloatField(blank=True, null=True)
+    long = models.FloatField(blank=True, null=True)
     lot_capacity = models.IntegerField()
     occupied_spaces = models.IntegerField()
     revenue = models.IntegerField()
     manager = models.CharField(max_length=32)
-    parking_spaces = models.ForeignKey(ParkingSpace, on_delete=models.SET_NULL, blank=True, null=True)
+    parking_spaces = models.ManyToManyField(ParkingSpace)
 
-    def is_availbale(self):
+    def is_available(self):
         return False if (self.occupied_spaces >= self.lot_capacity) else True
 
 class ParkingSession(models.Model):
