@@ -34,21 +34,6 @@ class RetrieveUser(APIView):
         user = request.user
         serializer = self.serializer_class(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    # def get(self, request):
-    #     retrieve_serializer = RetrieveUserSerializer(request)
-    #     return Response(status=status.HTTP_200_OK)
-        
-    
-    # @api_view(['GET'])
-    # def retrieve_user(self, request):
-    #     token = request.headers.get('Authorization').split(' ')[1]
-    #     decoded_token = jwt.decode(token, None, None)
-    #     user_id = decoded_token['user_id']
-    #     user = CustomUser.objects.get(id=user_id)
-    #     # username = user.username 
-    #     print(user, "called from serializer")
-    #     return Response(user)
 
 
 class UpdateUser(generics.UpdateAPIView):
@@ -59,7 +44,6 @@ class UpdateUser(generics.UpdateAPIView):
     
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
-        # make sure to catch 404's below
         obj = queryset.get(pk=self.request.user.id)
         self.check_object_permissions(self.request, obj)
         return obj
