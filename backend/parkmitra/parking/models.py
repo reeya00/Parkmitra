@@ -37,10 +37,8 @@ class ParkingLot(models.Model):
     occupied_spaces = models.IntegerField()
     revenue = models.IntegerField()
     manager = models.CharField(max_length=32)
-    parking_spaces = models.ManyToManyField(ParkingSpace)
     address = models.CharField(max_length=64, null=True, blank=True)
     rate_per_hour = models.FloatField()
-
 
     def is_available(self):
         return False if (self.occupied_spaces >= self.lot_capacity) else True
@@ -49,7 +47,6 @@ class ParkingSpace(models.Model):
     parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, blank=True, null=True)
     is_occupied = models.BooleanField()
     occupied_by = models.ForeignKey(user, on_delete=models.DO_NOTHING, blank=True, null=True)
-    rate_per_hour = models.IntegerField()
 
     def check_occupancy(self):
         return self.is_occupied
