@@ -139,7 +139,7 @@ REST_FRAMEWORK = {
     ),
     'JWT_AUTH_COOKIE': 'access_token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
-    # 'DATETIME_FORMAT': '%s000',
+    #'DATETIME_FORMAT': '%s000',
 }
 
 SIMPLE_JWT = {
