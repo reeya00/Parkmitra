@@ -65,7 +65,7 @@ class CreateSession(generics.CreateAPIView):
     serializer_class = ParkingSessionSerializer
 
 class ListParkingLots(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     serializer_class = ParkingLotSerializer
     queryset = ParkingLot.objects.all()
 

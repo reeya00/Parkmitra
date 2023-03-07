@@ -82,16 +82,18 @@ class ParkingLotAdapter extends TypeAdapter<ParkingLot> {
       lotName: fields[1] as String,
       lotCapacity: fields[2] as int,
       occupiedSpaces: (fields[3] as List).cast<dynamic>(),
-      revenue: fields[5] as double,
-      location: (fields[6] as Map).cast<dynamic, dynamic>(),
-      parkingSpaces: (fields[7] as Map).cast<dynamic, dynamic>(),
+      rate: fields[5] as double,
+      lat: fields[6] as double,
+      lng: fields[7] as double,
+      parkingSpaces: (fields[8] as Map).cast<dynamic, dynamic>(),
+      address: fields[9] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ParkingLot obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -101,11 +103,15 @@ class ParkingLotAdapter extends TypeAdapter<ParkingLot> {
       ..writeByte(3)
       ..write(obj.occupiedSpaces)
       ..writeByte(5)
-      ..write(obj.revenue)
+      ..write(obj.rate)
       ..writeByte(6)
-      ..write(obj.location)
+      ..write(obj.lat)
       ..writeByte(7)
-      ..write(obj.parkingSpaces);
+      ..write(obj.lng)
+      ..writeByte(8)
+      ..write(obj.parkingSpaces)
+      ..writeByte(9)
+      ..write(obj.address);
   }
 
   @override
