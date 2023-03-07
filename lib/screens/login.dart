@@ -59,7 +59,7 @@ void loginUser(String username, String password, Function() onSucess) async {
 }
 
 Future<void> writeUserDataToHive() async {
-  await Hive.openBox('userBox');
+  // await Hive.openBox('userBox');
   final box = Hive.box('userBox');
   final response = await http.get(
       Uri.parse('http://127.0.0.1:8000/parkmitra/userdata/'),

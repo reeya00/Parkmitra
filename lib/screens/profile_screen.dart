@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'home_screen.dart';
 
 class Vehicle {
   final String name;
@@ -19,42 +22,47 @@ class Vehicle {
   });
 }
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreenController extends GetxController {
+  final profileData = Rxn<Map<String, dynamic>>();
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  void onInit() {
+    fetchUserData().then((data) => profileData.value = data);
+
+    // super.onInit();
+  }
+
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class ProfileScreen extends StatelessWidget {
+  final profilescreenController = Get.put(ProfileScreenController());
   final _vehicles = <Vehicle>[].obs;
 
-  var listitems = [
-    'BIKE',
-    'CAR',
-    'VAN',
-    'JEEP',
-  ];
-  String dropdownvalue = 'BIKE';
+  String type = 'BIKE';
 
   Future<void> addNewVehicle(
     String name,
     String numberPlate,
     String vehicleModel,
     String vehicleColor,
-    String dropdownval,
+    String type,
   ) async {
     try {
+      print('box in making');
+      final userBox = await Hive.openBox('userBox');
+      final accesstoken = userBox.get('accessToken');
       final response = await http.post(
         Uri.parse('http://127.0.0.1:8000/parkmitra/addvehicle/'),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8'
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + accesstoken
         },
         body: jsonEncode(<String, String>{
-          "vehicle_type": dropdownval,
+          "vehicle_type": type,
           "brand_name": name,
           "vehicle_model": vehicleModel,
           "color": vehicleColor,
           "plate_number": numberPlate,
-          "owner": "4"
+          "owner": "1"
         }),
       );
       if (response.statusCode == 201) {
@@ -101,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await Get.defaultDialog(
       title: 'Add Vehicle',
       content: SizedBox(
-        height: 250,
+        height: 300,
         child: Column(
           children: [
             TextField(
@@ -136,23 +144,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 vehicleModel = value;
               },
             ),
-            Container(
-              height: 50,
-              child: DropdownButton<String>(
-                value: dropdownvalue,
-                onChanged: (String? newvalue) {
-                  setState(() {
-                    dropdownvalue = newvalue.toString();
-                    print(dropdownvalue);
-                  });
-                },
-                items: listitems.map((String dropdownitem) {
-                  return DropdownMenuItem<String>(
-                    value: dropdownitem,
-                    child: Text(dropdownitem),
-                  );
-                }).toList(),
-              ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    type = 'BIKE';
+                    print(type);
+                  },
+                  child: Icon(
+                    Icons.two_wheeler,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(20),
+                      backgroundColor: Colors.blueAccent),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    type = 'CAR';
+                    print(type);
+                  },
+                  child: Icon(
+                    //<-- SEE HERE
+                    Icons.directions_car,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(20),
+                      backgroundColor: Colors.blueAccent),
+                ),
+              ],
             ),
           ],
         ),
@@ -164,18 +193,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           numberPlate,
           vehicleModel,
           vehicleColor,
-          dropdownvalue,
+          type,
         );
-        addNewVehicle(
-            name, numberPlate, vehicleModel, vehicleColor, dropdownvalue);
+        addNewVehicle(name, numberPlate, vehicleModel, vehicleColor, type);
         Get.back();
       },
       textCancel: 'Cancel',
     );
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
+    var userBox;
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
@@ -195,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               )),
           SizedBox(height: 20),
           Text(
-            'Username',
+            profilescreenController.profileData.value!['username'],
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),

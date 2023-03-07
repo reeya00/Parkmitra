@@ -33,8 +33,7 @@ class User extends HiveObject {
       required this.vehicle,
       required this.session,
       required this.accessToken,
-      required this.refreshToken
-      });
+      required this.refreshToken});
 }
 
 @HiveType(typeId: 1)
@@ -48,17 +47,23 @@ class ParkingLot extends HiveObject {
   @HiveField(3)
   final List occupiedSpaces;
   @HiveField(5)
-  final double revenue;
+  final double rate;
   @HiveField(6)
-  final Map location;
+  final double lat;
   @HiveField(7)
+  final double lng;
+  @HiveField(8)
   final Map parkingSpaces;
+  @HiveField(9)
+  final String address;
   ParkingLot(
       {required this.id,
       required this.lotName,
       required this.lotCapacity,
       required this.occupiedSpaces,
-      required this.revenue,
-      required this.location,
-      required this.parkingSpaces});
+      required this.rate,
+      required this.lat,
+      required this.lng,
+      required this.parkingSpaces,
+      required this.address});
 }

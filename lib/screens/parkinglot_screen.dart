@@ -10,21 +10,67 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-Future<void> writeParkinglotDataToHive() async {
+// Future<void> writeParkinglotDataToHive(double lat, double lng) async {
+//   final response =
+//       await http.get(Uri.parse('http://127.0.0.1:8000/parkmitra/parkinglots/'));
+//   if (response.statusCode == 200) {
+//     final parkinglotBox = await Hive.box('parkingLot');
+//     final data = json.decode(response.body);
+//     await parkinglotBox.put('data', data);
+//     parkinglotBox.close();
+//   } else {
+//     throw Exception('Failed to load data');
+//   }
+// }
+
+Future<void> writeParkinglotDataToHive(double lat, double lng) async {
+  print('writeparkinglotdatatohive entered');
+  final parkinglotBox = await Hive.openBox('parkingLot');
   final response =
       await http.get(Uri.parse('http://127.0.0.1:8000/parkmitra/parkinglots/'));
-  
-
   if (response.statusCode == 200) {
-    final parkinglotBox = await Hive.box('parkingLot');
     final data = json.decode(response.body);
-    await parkinglotBox.put('data', data);
+    String parkinglotName = "";
+    double parkingRate = 0;
+    for (final parkinglot in data) {
+      if ((parkinglot['lat'] != null && parkinglot['long'] != null) &&
+          (parkinglot['lat'] - lat).abs() < 0.0001 &&
+          (parkinglot['long'] - lng).abs() < 0.0001) {
+        parkinglotName = parkinglot['lot_name'];
+        parkingRate = parkinglot['rate_per_hour'];
+        break;
+      }
+    }
+
+    if (parkinglotName != null) {
+      print('parking if entered');
+      print(parkingRate);
+      await parkinglotBox.putAll({
+        'lotName': parkinglotName,
+        'lat': lat,
+        'lng': lng,
+        'rate': parkingRate
+      });
+    }
+
+    await parkinglotBox.close();
   } else {
     throw Exception('Failed to load data');
   }
 }
 
+Future<Map<String, dynamic>> fetchParkinglotData() async {
+  final parkinglotBox = await Hive.openBox('parkinglot');
+  final lotName = parkinglotBox.get('lotName');
+  final rate = parkinglotBox.get('rate');
+  // print('function entered: $lotName');
+  return {'lotName': lotName};
+}
+
 class ParkinglotController extends GetxController {
+  final parkinglotData = Rxn<Map<String, dynamic>>();
+  // final parkinglotBox =  Hive.box('parkingLot');
+
   Color _containercolor = Colors.blue;
   //for dropdown
   var items = ['Activa Scooter', 'Hyundai Car', 'Yatri BIke'];
@@ -67,12 +113,15 @@ class ParkinglotController extends GetxController {
     entrytimeinput.text = "";
     exittimeinput.text = "";
     super.onInit();
-    writeParkinglotDataToHive();
+    // writeParkinglotDataToHive();
+    fetchParkinglotData().then((data) => parkinglotData.value = data);
+    
   }
 }
 
 class ParkinglotScreen extends StatelessWidget {
   final parkinglotController = Get.put(ParkinglotController());
+  
 
   @override
   Widget build(BuildContext context) {
@@ -95,16 +144,30 @@ class ParkinglotScreen extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      ListTile(
-                        title: const Text('Labim Mall',
-                            style: TextStyle(
-                                fontSize: 40, fontWeight: FontWeight.bold)),
-                        subtitle: const Text('Pulchowk, Lalitpur'),
-                      ),
+                      ListTile(title: Obx(() {
+                        final data = parkinglotController.parkinglotData.value;
+                        if (data != null) {
+                          // print(data['lotName']);
+                          return Text(
+                            data['lotName'],
+                            style: const TextStyle(
+                                fontSize: 36, fontWeight: FontWeight.bold),
+                          );
+                        } else if (data == null) {
+                          // Use the rx getter for hasError
+                          return const Text("Error loading parkinglot data");
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                        //   Text(data['lotName'],
+                        //     style: TextStyle(
+                        //         fontSize: 40, fontWeight: FontWeight.bold)),
+                        // subtitle: const Text('Pulchowk, Lalitpur'),
+                      })),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          SizedBox(width: 15, height: 70),
+                          SizedBox(width: 15, height: 140),
                           Text(
                             '300 km away',
                             style: TextStyle(
@@ -113,7 +176,7 @@ class ParkinglotScreen extends StatelessWidget {
                           SizedBox(
                             width: 20,
                           ),
-                          Text('Rs. 90 per hour',
+                          Text(parkinglotController.parkinglotData.value!['rate'],
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],

@@ -125,74 +125,83 @@ class _LocationPageState extends State<LocationPage> {
             MarkerLayer(
               markers: [
                 Marker(
-                    point: LatLng(27.6771, 85.3171),
-                    width: 80,
-                    height: 80,
-                    builder: (context) => InkWell(
-                          child: Icon(
-                            AppIcons.asset_8,
-                            size: 35,
-                            color: Colors.blueAccent,
-                            opticalSize: 40,
-                          ),
-                          onTap: () {
-                            print("markertapped");
-                            showBottomSheet(
-                              context: context,
-                              builder:(context){
-                                return SizedBox(
-                                    height: 200,
-                                    width: double.infinity,
-                                    child: Card(
-                                color: Colors.blue.shade100,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    ListTile(
-                                      title: const Text('Labim Mall',
-                                          style: TextStyle(
-                                              fontSize: 40,
-                                              fontWeight: FontWeight.bold)),
-                                      subtitle: const Text('Pulchowk, Lalitpur'),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        SizedBox(width: 15, height: 20),
-                                        Text(
-                                          '300 km away',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Text('Rs. 10 per hour',
+                  point: LatLng(27.6771, 85.3171),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(27.6771, 85.3171);
+                        showBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height: 200,
+                                width: double.infinity,
+                                child: Card(
+                                  color: Colors.blue.shade100,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      ListTile(
+                                        title: const Text('Labim Mall',
+                                            style: TextStyle(
+                                                fontSize: 40,
+                                                fontWeight: FontWeight.bold)),
+                                        subtitle:
+                                            const Text('Pulchowk, Lalitpur'),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          SizedBox(width: 15, height: 20),
+                                          Text(
+                                            '300 km away',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
-                                        SizedBox(width: 30,),
-                                        ElevatedButton(
-                                          onPressed: ()=> 
-                                          Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) => ParkinglotScreen())),
-                                          child: Text("Visit", style: TextStyle(fontWeight: FontWeight.bold),),
+                                                fontSize: 15),
                                           ),
-                                      ],
-                                    )
-                                  ],
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Text('Rs. 10 per hour',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15)),
+                                          SizedBox(
+                                            width: 30,
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ParkinglotScreen())),
+                                            child: Text(
+                                              "Visit",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                                  );}
-                                );
-                              }
-                            )
-                          ,
-                        ),
+                              );
+                            });
+                      }),
+                ),
                 Marker(
                   point: LatLng(_currentPosition?.latitude ?? 0,
                       _currentPosition?.longitude ?? 0),
