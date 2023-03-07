@@ -9,6 +9,7 @@ import 'login.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'home_screen.dart';
 
 // Future<void> writeParkinglotDataToHive(double lat, double lng) async {
 //   final response =
@@ -69,12 +70,17 @@ Future<Map<String, dynamic>> fetchParkinglotData() async {
 
 class ParkinglotController extends GetxController {
   final parkinglotData = Rxn<Map<String, dynamic>>();
+  final userData = Rxn<Map<String, dynamic>>();
+  final profileData = Rxn<Map<String, dynamic>>();
+
+  var items = ['Activa Scooter', 'Hyundai Car', 'Yatri Bike'];
+  String dropdownvalue = 'Activa Scooter';
+
   // final parkinglotBox =  Hive.box('parkingLot');
 
   Color _containercolor = Colors.blue;
   //for dropdown
-  var items = ['Activa Scooter', 'Hyundai Car', 'Yatri BIke'];
-  String dropdownvalue = 'Activa Scooter';
+
   TimeOfDay starttime = TimeOfDay(hour: 0, minute: 0);
   TimeOfDay endtime = TimeOfDay(hour: 0, minute: 0);
   String calcdifference = "";
@@ -109,19 +115,24 @@ class ParkinglotController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     entrytimeinput.text = "";
     exittimeinput.text = "";
     super.onInit();
     // writeParkinglotDataToHive();
     fetchParkinglotData().then((data) => parkinglotData.value = data);
-    
+    fetchUserData().then((userData) => profileData.value = userData);
+    final userBox = await Hive.openBox('userBox');
+    var items = userBox.get('vehicle');
+    for (final data in items) {
+      print(data['brand_name']);
+    }
+    String dropdownvalue = 'Activa Scooter';
   }
 }
 
 class ParkinglotScreen extends StatelessWidget {
   final parkinglotController = Get.put(ParkinglotController());
-  
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +187,9 @@ class ParkinglotScreen extends StatelessWidget {
                           SizedBox(
                             width: 20,
                           ),
-                          Text(parkinglotController.parkinglotData.value!['rate'],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                          // Text(parkinglotController.parkinglotData.value?['rate'],
+                          //     style: TextStyle(
+                          //         fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       )
                     ],
@@ -327,20 +338,61 @@ class ParkinglotScreen extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                         width: 400,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32.0),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                              backgroundColor: Colors.blue,
                             ),
-                            backgroundColor: Colors.blue,
-                          ),
-                          onPressed: () {
-                            // Book Parking Lot
-                          },
-                          child: Text(
-                            'Book',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
+                            onPressed: () async {
+                              // Book Parking Lot
+                              print('onpressed clicked book');
+                              final temp = 'Bearer ' + Globals.access_token;
+                              DateTime now = DateTime.now();
+                              DateTime dateTime_start = DateTime(
+                                  now.year,
+                                  now.month,
+                                  now.day,
+                                  parkinglotController.starttime.hour,
+                                  parkinglotController.starttime.minute);
+                              String iso8601string_start =
+                                  dateTime_start.toIso8601String();
+                              DateTime dateTime_end = DateTime(
+                                  now.year,
+                                  now.month,
+                                  now.day,
+                                  parkinglotController.endtime.hour,
+                                  parkinglotController.endtime.minute);
+                              String iso8601string_end =
+                                  dateTime_end.toIso8601String();
+                              print(iso8601string_start + '000Z');
+                              print(iso8601string_end + '000Z');
+                              final userBox = await Hive.openBox('userBox');
+                              final accesstoken = userBox.get('accessToken');
+                              final postResponse = await http.post(
+                                  Uri.parse(
+                                      'http://127.0.0.1:8000/parkmitra/sessions/add'),
+                                  headers: <String, String>{
+                                    'Content-Type':
+                                        'application/json; charset=UTF-8',
+                                    'Authorization': 'Bearer ' + accesstoken
+                                  },
+                                  body: jsonEncode(<String, String>{
+                                    "user": "1",
+                                    "vehicle": "1",
+                                    "parking_spot": "1",
+                                    "entry_time": iso8601string_start + '000Z',
+                                    "exit_time": iso8601string_end + '000Z'
+                                  }));
+                              if (postResponse.statusCode == 201) {
+                                print("Parking Spot booked successfully");
+                                Get.snackbar('Success', 'Booking Successful');
+                              }
+                            },
+                            child: Text(
+                              'Book',
+                              style: TextStyle(fontSize: 18),
+                            )),
                       ))
                     ],
                   ),

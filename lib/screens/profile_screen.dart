@@ -20,6 +20,7 @@ class Vehicle {
     required this.vehicleColor,
     required this.vehicleType,
   });
+
 }
 
 class ProfileScreenController extends GetxController {
@@ -30,7 +31,6 @@ class ProfileScreenController extends GetxController {
 
     // super.onInit();
   }
-
 }
 
 class ProfileScreen extends StatelessWidget {
@@ -67,6 +67,10 @@ class ProfileScreen extends StatelessWidget {
       );
       if (response.statusCode == 201) {
         final Map<String, dynamic> responseData = json.decode(response.body);
+        final userBox = await Hive.openBox('userBox');
+        final vehicleList = userBox.get('vehicle') as List<Map<String, dynamic>>;
+        vehicleList.add(responseData);
+        userBox.put('vehicle', vehicleList);
       } else {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final String errorMessage = responseData['detail'];
@@ -201,8 +205,6 @@ class ProfileScreen extends StatelessWidget {
       textCancel: 'Cancel',
     );
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
