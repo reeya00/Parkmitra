@@ -75,8 +75,10 @@ class ParkinglotController extends GetxController {
 
   var items = ['Activa Scooter', 'Hyundai Car', 'Yatri Bike'];
   String dropdownvalue = 'Activa Scooter';
-  List<String> vehiclelist = [];
-  var selectedDropdown;
+  // List<String> vehiclelist = [];
+  RxList<String> vehiclelist = <String>[].obs;
+  // var selectedDropdown;
+  Rx<String> selectedDropdown = Rx<String>('');
 
   // final parkinglotBox =  Hive.box('parkingLot');
 
@@ -90,6 +92,12 @@ class ParkinglotController extends GetxController {
 
   TextEditingController entrytimeinput = TextEditingController();
   TextEditingController exittimeinput = TextEditingController();
+
+  // void updateVehicleList(List<dynamic> data) {
+  //   vehiclelist.value = data.map((e) => e['brand_name'] as String).toList();
+  //   selectedDropdown = vehiclelist[0];
+  //   update();
+  // }
 
   String findTimeDifference(entrytime, exittime) {
     print("from findtime $entrytime $exittime");
@@ -126,16 +134,17 @@ class ParkinglotController extends GetxController {
     fetchUserData().then((userData) => profileData.value = userData);
     final userBox = await Hive.openBox('userBox');
     var items = userBox.get('vehicle');
+    // updateVehicleList(items);
     for (final data in items) {
-      // print(data['brand_name']);
+      print(data);
       var vehicle = data['brand_name'];
       // var selectedDropdown = vehiclelist[0];
       vehiclelist.add(vehicle);
       print(vehicle);
-      print(vehicle.runtimeType);
+      // print(vehicle.runtimeType);
       // print(selectedDropdown);
     }
-    selectedDropdown = vehiclelist[0];
+    selectedDropdown.value = vehiclelist[0];
     // print(items.runtimeType);
     print(vehiclelist);
     print(selectedDropdown);
@@ -236,23 +245,22 @@ class ParkinglotScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 12, color: Colors.black.withOpacity(0.8)),
                       ),
-                      DropdownButton<String>(
-                        value: parkinglotController.selectedDropdown,
-                        items: parkinglotController.vehiclelist
-                          .map((String items) => DropdownMenuItem(
-                            value: items,
-                            child: Text(
-                              items,
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ))
-                          .toList(),
-                        onChanged: (String? newvalue) {
-                          parkinglotController.selectedDropdown = newvalue!;
-                          parkinglotController.update();
-                        },
-                      ),
-
+                      Obx(() => DropdownButton<String>(
+                            value: parkinglotController.selectedDropdown.value,
+                            items: parkinglotController.vehiclelist
+                                .map((String items) => DropdownMenuItem<String>(
+                                      value: items,
+                                      child: Text(
+                                        items,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: (String? newvalue) {
+                              parkinglotController.selectedDropdown.value = newvalue!;
+                              // parkinglotController.update();
+                            },
+                          )),
                       SizedBox(height: 20),
                       Row(
                         children: [
