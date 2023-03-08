@@ -656,6 +656,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  polyline:
+    dependency: "direct main"
+    description:
+      name: polyline
+      sha256: "4ffdbc0d3a836eaf60bcd610ea82fc407681e5edcfe87ac90545b6e6b1c82077"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   pool:
     dependency: transitive
     description:
@@ -974,5 +982,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.19.0 <4.0.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.3.0"
