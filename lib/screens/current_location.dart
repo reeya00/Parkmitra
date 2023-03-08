@@ -8,6 +8,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'dart:math';
 import 'app_icons.dart';
+import 'direction.dart';
 
 class MarkerGestureDetector extends StatelessWidget {
   final Widget child;
@@ -38,6 +39,7 @@ class LocationPage extends StatefulWidget {
 class _LocationPageState extends State<LocationPage> {
   String? _currentAddress;
   Position? _currentPosition;
+  List<LatLng> points = [];
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -79,7 +81,7 @@ class _LocationPageState extends State<LocationPage> {
     }).catchError((e) {
       debugPrint(e);
     });
-    print(_currentAddress);
+    // print(_currentAddress);
   }
 
   Future<void> _getAddressFromLatLng(Position position) async {
@@ -121,6 +123,16 @@ class _LocationPageState extends State<LocationPage> {
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               subdomains: ['a', 'b', 'c'],
             ),
+            PolylineLayer(
+              polylineCulling: false,
+              polylines: [
+                Polyline(
+                  points: points,
+                  color: Colors.blue.shade900,
+                  strokeWidth: 4
+                )
+              ],
+            ),
             // ignore: prefer_const_constructors
             MarkerLayer(
               markers: [
@@ -138,6 +150,10 @@ class _LocationPageState extends State<LocationPage> {
                       onTap: () {
                         print("markertapped");
                         writeParkinglotDataToHive(27.6771, 85.3171);
+                        if (_currentPosition != null){
+                          getDirections(_currentPosition?.latitude ??0,_currentPosition?.longitude??0, 27.6771, 85.3171,points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
                         showBottomSheet(
                             context: context,
                             builder: (context) {
@@ -221,19 +237,6 @@ class _LocationPageState extends State<LocationPage> {
                 ),
               ],
             ),
-            // PolylineLayer(
-            //   polylineCulling: false,
-            //   polylines: [
-            //     Polyline(
-            //       points: [
-            //         LatLng(27.7172, 85.3240),
-            //         LatLng(_currentPosition?.latitude ?? 0,
-            //             _currentPosition?.longitude ?? 0)
-            //       ],
-            //       color: Colors.blue,
-            //     )
-            //   ],
-            // )
           ]),
     ));
   }
