@@ -20,15 +20,6 @@ class Vehicle(models.Model):
     def __str__(self):
         return f"{self.vehicle_model} {self.plate_number}"    
     
-class ParkingSpace(models.Model):
-    # parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE)
-    is_occupied = models.BooleanField()
-    occupied_by = models.ForeignKey(user, on_delete=models.DO_NOTHING, blank=True, null=True)
-
-    def check_occupancy(self):
-        return self.is_occupied
-    
-    
 class ParkingLot(models.Model):
     lot_name = models.CharField(max_length=32)
     lat = models.FloatField(blank=True, null=True)
@@ -44,7 +35,7 @@ class ParkingLot(models.Model):
         return False if (self.occupied_spaces >= self.lot_capacity) else True
 
 class ParkingSpace(models.Model):
-    parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, blank=True, null=True)
+    parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, blank=True, null=True, related_name="spaces")
     is_occupied = models.BooleanField()
     occupied_by = models.ForeignKey(user, on_delete=models.DO_NOTHING, blank=True, null=True)
 

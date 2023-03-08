@@ -33,12 +33,14 @@ Future<void> writeParkinglotDataToHive(double lat, double lng) async {
     final data = json.decode(response.body);
     String parkinglotName = "";
     double parkingRate = 0;
+    var parkingSpaces;
     for (final parkinglot in data) {
       if ((parkinglot['lat'] != null && parkinglot['long'] != null) &&
           (parkinglot['lat'] - lat).abs() < 0.0001 &&
           (parkinglot['long'] - lng).abs() < 0.0001) {
         parkinglotName = parkinglot['lot_name'];
         parkingRate = parkinglot['rate_per_hour'];
+        parkingSpaces = parkinglot['parking_spaces'];
         break;
       }
     }
@@ -46,26 +48,18 @@ Future<void> writeParkinglotDataToHive(double lat, double lng) async {
     if (parkinglotName != null) {
       print('parking if entered');
       print(parkingRate);
-      await parkinglotBox.putAll({
+      parkinglotBox.putAll({
         'lotName': parkinglotName,
         'lat': lat,
         'lng': lng,
-        'rate': parkingRate
+        'rate': parkingRate,
+        'parkingSpaces': parkingSpaces
       });
     }
-
-    await parkinglotBox.close();
+    parkinglotBox.close();
   } else {
     throw Exception('Failed to load data');
   }
-}
-
-Future<Map<String, dynamic>> fetchParkinglotData() async {
-  final parkinglotBox = await Hive.openBox('parkinglot');
-  final lotName = parkinglotBox.get('lotName');
-  final rate = parkinglotBox.get('rate');
-  // print('function entered: $lotName');
-  return {'lotName': lotName};
 }
 
 class ParkinglotController extends GetxController {
@@ -129,15 +123,14 @@ class ParkinglotController extends GetxController {
     entrytimeinput.text = "";
     exittimeinput.text = "";
     super.onInit();
-    // writeParkinglotDataToHive();
-    fetchParkinglotData().then((data) => parkinglotData.value = data);
-    fetchUserData().then((userData) => profileData.value = userData);
+
+    final parkingLotBox = await Hive.openBox('parkingLot');
     final userBox = await Hive.openBox('userBox');
     var items = userBox.get('vehicle');
     // updateVehicleList(items);
-    for (final data in items) {
-      print(data);
-      var vehicle = data['brand_name'];
+    for (final item in items) {
+      print(item);
+      var vehicle = item['brand_name'] + ' ' + item['vehicle_model'];
       // var selectedDropdown = vehiclelist[0];
       vehiclelist.add(vehicle);
       print(vehicle);
@@ -148,13 +141,13 @@ class ParkinglotController extends GetxController {
     // print(items.runtimeType);
     print(vehiclelist);
     print(selectedDropdown);
-    String dropdownvalue = 'Activa Scooter';
+    // String dropdownvalue = 'Activa Scooter';
   }
 }
 
 class ParkinglotScreen extends StatelessWidget {
   final parkinglotController = Get.put(ParkinglotController());
-
+  var userBox;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,7 +250,8 @@ class ParkinglotScreen extends StatelessWidget {
                                     ))
                                 .toList(),
                             onChanged: (String? newvalue) {
-                              parkinglotController.selectedDropdown.value = newvalue!;
+                              parkinglotController.selectedDropdown.value =
+                                  newvalue!;
                               // parkinglotController.update();
                             },
                           )),
@@ -368,7 +362,6 @@ class ParkinglotScreen extends StatelessWidget {
                             onPressed: () async {
                               // Book Parking Lot
                               print('onpressed clicked book');
-                              final temp = 'Bearer ' + Globals.access_token;
                               DateTime now = DateTime.now();
                               DateTime dateTime_start = DateTime(
                                   now.year,
@@ -389,7 +382,11 @@ class ParkinglotScreen extends StatelessWidget {
                               print(iso8601string_start + '000Z');
                               print(iso8601string_end + '000Z');
                               final userBox = await Hive.openBox('userBox');
+                              // final parkingLotBox =
+                              //     await Hive.openBox('parkingLot');
+                              // print(parkingLotBox.get('parkingSessions'));
                               final accesstoken = userBox.get('accessToken');
+                              final userID = userBox.get('id');
                               final postResponse = await http.post(
                                   Uri.parse(
                                       'http://127.0.0.1:8000/parkmitra/sessions/add'),
@@ -399,9 +396,9 @@ class ParkinglotScreen extends StatelessWidget {
                                     'Authorization': 'Bearer ' + accesstoken
                                   },
                                   body: jsonEncode(<String, String>{
-                                    "user": "1",
+                                    "user": "$userID",
                                     "vehicle": "1",
-                                    "parking_spot": "1",
+                                    "parking_space": "1",
                                     "entry_time": iso8601string_start + '000Z',
                                     "exit_time": iso8601string_end + '000Z'
                                   }));

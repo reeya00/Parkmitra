@@ -12,7 +12,7 @@ void main() async {
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox<User>('user');
   Hive.registerAdapter(ParkingLotAdapter());
-  await Hive.openBox('parkingLot');
+  await Hive.openBox<ParkingLot>('parkingLot');
 
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,

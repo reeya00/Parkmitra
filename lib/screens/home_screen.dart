@@ -21,8 +21,25 @@ class HomeController extends GetxController {
 Future<Map<String, dynamic>> fetchUserData() async {
   final userBox = Hive.box('userBox');
   final username = userBox.get('username');
+  final accessToken = userBox.get('accessToken');
+  final vehicle = userBox.get('vehicle');
+  final firstName = userBox.get('firstName');
+  final lastName = userBox.get('lastName');
+  final email = userBox.get('email');
+  final refreshToken = userBox.get('refreshToken');
+  final session = userBox.get('session');
+
   // print('function entered');
-  return {'username': username};
+  return {
+    'username': username,
+    'accessToken': accessToken,
+    'vehicle': vehicle,
+    'firstName': firstName,
+    'lastName': lastName,
+    'email': email,
+    'refreshToken': refreshToken,
+    'session': session,
+  };
 }
 
 class HomeScreen extends StatelessWidget {
