@@ -75,6 +75,8 @@ class ParkinglotController extends GetxController {
 
   var items = ['Activa Scooter', 'Hyundai Car', 'Yatri Bike'];
   String dropdownvalue = 'Activa Scooter';
+  List<String> vehiclelist = [];
+  var selectedDropdown;
 
   // final parkinglotBox =  Hive.box('parkingLot');
 
@@ -125,8 +127,18 @@ class ParkinglotController extends GetxController {
     final userBox = await Hive.openBox('userBox');
     var items = userBox.get('vehicle');
     for (final data in items) {
-      print(data['brand_name']);
+      // print(data['brand_name']);
+      var vehicle = data['brand_name'];
+      // var selectedDropdown = vehiclelist[0];
+      vehiclelist.add(vehicle);
+      print(vehicle);
+      print(vehicle.runtimeType);
+      // print(selectedDropdown);
     }
+    selectedDropdown = vehiclelist[0];
+    // print(items.runtimeType);
+    print(vehiclelist);
+    print(selectedDropdown);
     String dropdownvalue = 'Activa Scooter';
   }
 }
@@ -224,22 +236,23 @@ class ParkinglotScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 12, color: Colors.black.withOpacity(0.8)),
                       ),
-                      DropdownButton(
-                        value: parkinglotController.dropdownvalue,
-                        items: parkinglotController.items
-                            .map((String items) => DropdownMenuItem(
-                                  value: items,
-                                  child: Text(
-                                    items,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ))
-                            .toList(),
+                      DropdownButton<String>(
+                        value: parkinglotController.selectedDropdown,
+                        items: parkinglotController.vehiclelist
+                          .map((String items) => DropdownMenuItem(
+                            value: items,
+                            child: Text(
+                              items,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ))
+                          .toList(),
                         onChanged: (String? newvalue) {
-                          parkinglotController.dropdownvalue = newvalue!;
+                          parkinglotController.selectedDropdown = newvalue!;
                           parkinglotController.update();
                         },
                       ),
+
                       SizedBox(height: 20),
                       Row(
                         children: [
