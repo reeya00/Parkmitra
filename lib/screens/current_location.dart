@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'dart:math';
 import 'app_icons.dart';
@@ -129,7 +130,10 @@ class _LocationPageState extends State<LocationPage> {
                 Polyline(
                   points: points,
                   color: Colors.blue.shade900,
-                  strokeWidth: 4
+                  strokeWidth: 4,
+                  strokeCap: StrokeCap.round,
+                  borderColor: Colors.black.withOpacity(0.5),
+                  borderStrokeWidth: 1
                 )
               ],
             ),
@@ -144,7 +148,7 @@ class _LocationPageState extends State<LocationPage> {
                       child: Icon(
                         AppIcons.asset_8,
                         size: 35,
-                        color: Colors.blueAccent,
+                        color: primaryBlue,
                         opticalSize: 40,
                       ),
                       onTap: () {
