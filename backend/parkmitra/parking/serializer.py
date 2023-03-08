@@ -31,6 +31,10 @@ class ParkingSessionSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def add_session(self, validated_data):
+        space = ParkingSpace.objects.get(pk=validated_data['parking_space'])
+        space.is_occupied = True
+        space.occupied_by = validated_data['user']
+        space.save()
         instance = self.Meta.model(**validated_data)
         instance.save()
         return instance
@@ -41,10 +45,14 @@ class ParkingSpaceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ParkingLotSerializer(serializers.ModelSerializer):
-    parking_spaces = ParkingSpaceSerializer(many=True, read_only=True)
+    parking_spaces = serializers.SerializerMethodField()
     class Meta:
         model = ParkingLot
         fields = '__all__' 
+    
+    def get_parking_spaces(self, obj):
+        spaces = obj.spaces.all()
+        return [ParkingSpaceSerializer(space).data for space in spaces]
 
 class UserSerializer(serializers.ModelSerializer):
     vehicle = serializers.SerializerMethodField()

@@ -20,7 +20,6 @@ class Vehicle {
     required this.vehicleColor,
     required this.vehicleType,
   });
-
 }
 
 class ProfileScreenController extends GetxController {
@@ -48,8 +47,9 @@ class ProfileScreen extends StatelessWidget {
   ) async {
     try {
       print('box in making');
-      final userBox = await Hive.openBox('userBox');
+      var userBox = await Hive.openBox('userBox');
       final accesstoken = userBox.get('accessToken');
+      // final ownerID = userBox.get('id');
       final response = await http.post(
         Uri.parse('http://127.0.0.1:8000/parkmitra/addvehicle/'),
         headers: <String, String>{
@@ -62,16 +62,17 @@ class ProfileScreen extends StatelessWidget {
           "vehicle_model": vehicleModel,
           "color": vehicleColor,
           "plate_number": numberPlate,
-          "owner": "1"
+          "owner": "2"
         }),
       );
       if (response.statusCode == 201) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final userBox = await Hive.openBox('userBox');
-        final vehicleList = userBox.get('vehicle') as List<Map<String, dynamic>>;
+        final vehicleList = userBox.get('vehicle') as List<dynamic>;
         vehicleList.add(responseData);
         userBox.put('vehicle', vehicleList);
       } else {
+        print(response.statusCode);
         final Map<String, dynamic> responseData = json.decode(response.body);
         final String errorMessage = responseData['detail'];
         throw Exception(errorMessage);
@@ -208,7 +209,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var vehicles = <dynamic>[];
     var userBox;
+    RxList<dynamic> vehiclesRx;
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
@@ -239,16 +242,23 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(height: 20),
           Expanded(
             child: Obx(
-              () => ListView.builder(
-                itemCount: _vehicles.length,
-                itemBuilder: (context, index) {
-                  final vehicle = _vehicles[index];
-                  return ListTile(
-                    title: Text(vehicle.name),
-                    subtitle: Text(vehicle.numberPlate),
-                  );
-                },
-              ),
+              () {
+                userBox = Hive.box('userBox');
+                vehicles = userBox.get('vehicle');
+                vehiclesRx = vehicles.obs;
+                return ListView.builder(
+                  itemCount: vehiclesRx.length,
+                  itemBuilder: (context, index) {
+                    final vehicle = vehiclesRx[index];
+                    final titleText = vehicle['brand_name'];
+                    final subtitleText = vehicle['vehicle_model'];
+                    return ListTile(
+                      title: Text(titleText),
+                      subtitle: Text(subtitleText),
+                    );
+                  },
+                );
+              },
             ),
           ),
           ElevatedButton(
