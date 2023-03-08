@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:parkmitra/screens/current_location.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:parkmitra/screens/login.dart';
 import 'active_screen.dart';
 
 class HomeController extends GetxController {
@@ -45,6 +46,24 @@ class HomeScreen extends StatelessWidget {
           }
         }),
         automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(
+              onPressed: () async {
+                Get.defaultDialog(
+                  title: 'Confirm Logout',
+                  middleText: 'Are you sure you want to logout?',
+                  confirmTextColor: Colors.white,
+                  onConfirm: () async {
+                    logout();
+                  },
+                  textConfirm: 'Logout',
+                  cancelTextColor: Colors.blue,
+                  // onCancel: () => Get.back(),
+                  textCancel: 'Cancel',
+                );
+              },
+              icon: Icon(Icons.logout))
+        ],
       ),
       body: Stack(
         children: [
@@ -53,4 +72,12 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void logout() async {
+  final Box<dynamic> userBox = Hive.box<dynamic>('userBox');
+  await userBox.clear();
+
+  // Navigate to the login screen or home screen
+  Get.to(() => LoginScree());
 }
