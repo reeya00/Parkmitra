@@ -36,10 +36,8 @@ class LocationPageController extends GetxController {
   String? _currentAddress;
   Position? _currentPosition;
   List<LatLng> points = [];
-  List<LatLng> points1 = [];
-  List<LatLng> points2 = [];
-
-  
+  // List<LatLng> points1 = [];
+  // List<LatLng> points2 = [];
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -47,19 +45,21 @@ class LocationPageController extends GetxController {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-        Get.snackbar('Error', 'Location services are disabled. Please enable the services');
-    return false;
+      Get.snackbar('Error',
+          'Location services are disabled. Please enable the services');
+      return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-       Get.snackbar('Error', 'Location permissions are denied');
+        Get.snackbar('Error', 'Location permissions are denied');
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      Get.snackbar('Error', 'Location permissions are permanently denied, we cannot request permissions.');
+      Get.snackbar('Error',
+          'Location permissions are permanently denied, we cannot request permissions.');
       return false;
     }
     return true;
@@ -67,28 +67,30 @@ class LocationPageController extends GetxController {
 
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
-
+    print('get loaction entered');
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       _currentPosition = position;
-      _getAddressFromLatLng(_currentPosition!);
+      print(_currentPosition);
+      update();
+      // _getAddressFromLatLng(_currentPosition!);
     });
     // print(_currentAddress);
   }
 
-  Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
-      Placemark place = placemarks[0];
-      _currentAddress =
-          '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
-      update();
-    }).catchError((e) {
-      debugPrint(e);
-    });
-  }
+  // Future<void> _getAddressFromLatLng(Position position) async {
+  //   print('get address entered');
+  //   await placemarkFromCoordinates(
+  //           _currentPosition!.latitude, _currentPosition!.longitude)
+  //       .then((List<Placemark> placemarks) {
+  //     Placemark place = placemarks[0];
+  //     _currentAddress =
+  //         '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+  //     print(_currentAddress);
+  //     update();
+  //   });
+  // }
 
   double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
@@ -98,68 +100,63 @@ class LocationPageController extends GetxController {
     return 12742 * asin(sqrt(a));
   }
 
-  void _showMyBottomSheet(BuildContext context)async {
-    Get.bottomSheet(
-        SizedBox(
-            height: 200,
-            width: double.infinity,
-            child: Card(
-              color: Colors.blue.shade100,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ListTile(
-                    title: const Text('Labim Mall',
-                        style: TextStyle(
-                            fontSize: 40, fontWeight: FontWeight.bold)),
-                    subtitle: const Text('Pulchowk, Lalitpur'),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      SizedBox(width: 15, height: 20),
-                      Text(
-                        '300 km away',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text('Rs. 10 per hour',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15)),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ParkinglotScreen())),
-                        child: Text(
-                          "Visit",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+  void _showMyBottomSheet(BuildContext context, String name) async {
+    Get.bottomSheet(SizedBox(
+      height: 200,
+      width: double.infinity,
+      child: Card(
+        color: Colors.blue.shade100,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 20,
             ),
-          )
- );}
-        
+            ListTile(
+              title: Text(name,
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+              subtitle: const Text('Pulchowk, Lalitpur'),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(width: 15, height: 20),
+                Text(
+                  '300 km away',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text('Rs. 10 per hour',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                SizedBox(
+                  width: 30,
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ParkinglotScreen())),
+                  child: Text(
+                    "Visit",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    ));
+  }
+
   @override
   void onInit() {
     super.onInit();
     // final parkinglotBox = await Hive.openBox('parkingLot');
-
     _getCurrentPosition();
-    print(_currentPosition);
   }
 }
 
@@ -192,6 +189,24 @@ class LocationPage extends StatelessWidget {
             MarkerLayer(
               markers: [
                 Marker(
+                  point: LatLng(
+                      locationpageController._currentPosition?.latitude ?? 0,
+                      locationpageController._currentPosition?.longitude ?? 0),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => MarkerGestureDetector(
+                    child: Icon(
+                      Icons.location_on,
+                      size: 40,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      print("marker tapped");
+                      // Do something when the marker is tapped
+                    },
+                  ),
+                ),
+                Marker(
                   point: LatLng(27.6771, 85.3171),
                   width: 80,
                   height: 80,
@@ -207,13 +222,18 @@ class LocationPage extends StatelessWidget {
                         writeParkinglotDataToHive(27.6771, 85.3171);
                         if (locationpageController._currentPosition != null) {
                           getDirections(
-                              locationpageController._currentPosition?.latitude ?? 0,
-                              locationpageController._currentPosition?.longitude ?? 0,
+                              locationpageController
+                                      ._currentPosition?.latitude ??
+                                  0,
+                              locationpageController
+                                      ._currentPosition?.longitude ??
+                                  0,
                               27.6771,
                               85.3171,
                               locationpageController.points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
-                          locationpageController._showMyBottomSheet(context);
+                          locationpageController._showMyBottomSheet(
+                              context, 'Labim Mall');
                         }
                       }),
                 ),
@@ -230,16 +250,21 @@ class LocationPage extends StatelessWidget {
                       ),
                       onTap: () {
                         print("markertapped");
-                        writeParkinglotDataToHive(27.6771, 85.3171);
+                        writeParkinglotDataToHive(27.7105, 85.3179);
                         if (locationpageController._currentPosition != null) {
                           getDirections(
-                              locationpageController._currentPosition?.latitude ?? 0,
-                              locationpageController._currentPosition?.longitude ?? 0,
-                              27.6771,
-                              85.3171,
-                              locationpageController.points2);
+                              locationpageController
+                                      ._currentPosition?.latitude ??
+                                  0,
+                              locationpageController
+                                      ._currentPosition?.longitude ??
+                                  0,
+                              27.7105,
+                              85.3179,
+                              locationpageController.points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
-                          locationpageController._showMyBottomSheet(context);
+                          locationpageController._showMyBottomSheet(
+                              context, 'Sherpa Mall');
                         }
                       }),
                 ),
@@ -256,35 +281,23 @@ class LocationPage extends StatelessWidget {
                       ),
                       onTap: () {
                         print("markertapped");
-                        writeParkinglotDataToHive(27.6771, 85.3171);
+                        writeParkinglotDataToHive(27.6994, 85.3129);
                         if (locationpageController._currentPosition != null) {
                           getDirections(
-                              locationpageController._currentPosition?.latitude ?? 0,
-                              locationpageController._currentPosition?.longitude ?? 0,
-                              27.6771,
-                              85.3171,
-                              locationpageController.points1);
+                              locationpageController
+                                      ._currentPosition?.latitude ??
+                                  0,
+                              locationpageController
+                                      ._currentPosition?.longitude ??
+                                  0,
+                              27.6994,
+                              85.3129,
+                              locationpageController.points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
-                          locationpageController._showMyBottomSheet(context);
+                          locationpageController._showMyBottomSheet(
+                              context, 'Civil Mall');
                         }
                       }),
-                ),
-                Marker(
-                  point: LatLng(locationpageController._currentPosition?.latitude ?? 0,
-                      locationpageController._currentPosition?.longitude ?? 0),
-                  width: 80,
-                  height: 80,
-                  builder: (context) => MarkerGestureDetector(
-                    child: Icon(
-                      Icons.location_on,
-                      size: 40,
-                      color: Colors.red,
-                    ),
-                    onTap: () {
-                      print("marker tapped");
-                      // Do something when the marker is tapped
-                    },
-                  ),
                 ),
               ],
             ),

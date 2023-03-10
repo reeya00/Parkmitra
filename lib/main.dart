@@ -3,6 +3,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/login.dart';
 import 'package:parkmitra/screens/nav_bar.dart';
+import 'package:parkmitra/screens/qr_scanner.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';

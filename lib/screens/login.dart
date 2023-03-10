@@ -63,6 +63,7 @@ Future<void> writeUserDataToHive() async {
   // await Hive.openBox('userBox');
   final box = Hive.box('userBox');
   final response = await http.get(
+      // Uri.parse('https://10cb-202-51-76-43.in.ngrok.io/'),
       Uri.parse('http://127.0.0.1:8000/parkmitra/userdata/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
