@@ -1,15 +1,17 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hive/hive.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'dart:math';
 import 'app_icons.dart';
 import 'direction.dart';
+import 'package:get/get.dart';
 
 class MarkerGestureDetector extends StatelessWidget {
   final Widget child;
@@ -30,17 +32,14 @@ class MarkerGestureDetector extends StatelessWidget {
   }
 }
 
-class LocationPage extends StatefulWidget {
-  const LocationPage({Key? key}) : super(key: key);
-
-  @override
-  State<LocationPage> createState() => _LocationPageState();
-}
-
-class _LocationPageState extends State<LocationPage> {
+class LocationPageController extends GetxController {
   String? _currentAddress;
   Position? _currentPosition;
   List<LatLng> points = [];
+  List<LatLng> points1 = [];
+  List<LatLng> points2 = [];
+
+  
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -48,24 +47,19 @@ class _LocationPageState extends State<LocationPage> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
-      return false;
+        Get.snackbar('Error', 'Location services are disabled. Please enable the services');
+    return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
+       Get.snackbar('Error', 'Location permissions are denied');
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+      Get.snackbar('Error', 'Location permissions are permanently denied, we cannot request permissions.');
       return false;
     }
     return true;
@@ -77,10 +71,8 @@ class _LocationPageState extends State<LocationPage> {
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
-      setState(() => _currentPosition = position);
+      _currentPosition = position;
       _getAddressFromLatLng(_currentPosition!);
-    }).catchError((e) {
-      debugPrint(e);
     });
     // print(_currentAddress);
   }
@@ -90,10 +82,9 @@ class _LocationPageState extends State<LocationPage> {
             _currentPosition!.latitude, _currentPosition!.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
-      setState(() {
-        _currentAddress =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
-      });
+      _currentAddress =
+          '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      update();
     }).catchError((e) {
       debugPrint(e);
     });
@@ -107,12 +98,73 @@ class _LocationPageState extends State<LocationPage> {
     return 12742 * asin(sqrt(a));
   }
 
+  void _showMyBottomSheet(BuildContext context)async {
+    Get.bottomSheet(
+        SizedBox(
+            height: 200,
+            width: double.infinity,
+            child: Card(
+              color: Colors.blue.shade100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListTile(
+                    title: const Text('Labim Mall',
+                        style: TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.bold)),
+                    subtitle: const Text('Pulchowk, Lalitpur'),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(width: 15, height: 20),
+                      Text(
+                        '300 km away',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text('Rs. 10 per hour',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15)),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ParkinglotScreen())),
+                        child: Text(
+                          "Visit",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          )
+ );}
+        
   @override
-  void initState() {
-    super.initState();
+  void onInit() {
+    super.onInit();
+    // final parkinglotBox = await Hive.openBox('parkingLot');
+
     _getCurrentPosition();
     print(_currentPosition);
   }
+}
+
+class LocationPage extends StatelessWidget {
+  final locationpageController = Get.put(LocationPageController());
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,16 +177,15 @@ class _LocationPageState extends State<LocationPage> {
               subdomains: ['a', 'b', 'c'],
             ),
             PolylineLayer(
-              polylineCulling: false,
+              // polylineCulling: false,
               polylines: [
                 Polyline(
-                  points: points,
-                  color: Colors.blue.shade900,
-                  strokeWidth: 4,
-                  strokeCap: StrokeCap.round,
-                  borderColor: Colors.black.withOpacity(0.5),
-                  borderStrokeWidth: 1
-                )
+                    points: locationpageController.points,
+                    color: Colors.blue.shade900,
+                    strokeWidth: 4,
+                    strokeCap: StrokeCap.round,
+                    borderColor: Colors.black.withOpacity(0.5),
+                    borderStrokeWidth: 1)
               ],
             ),
             // ignore: prefer_const_constructors
@@ -154,77 +205,73 @@ class _LocationPageState extends State<LocationPage> {
                       onTap: () {
                         print("markertapped");
                         writeParkinglotDataToHive(27.6771, 85.3171);
-                        if (_currentPosition != null){
-                          getDirections(_currentPosition?.latitude ??0,_currentPosition?.longitude??0, 27.6771, 85.3171,points);
+                        if (locationpageController._currentPosition != null) {
+                          getDirections(
+                              locationpageController._currentPosition?.latitude ?? 0,
+                              locationpageController._currentPosition?.longitude ?? 0,
+                              27.6771,
+                              85.3171,
+                              locationpageController.points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          locationpageController._showMyBottomSheet(context);
                         }
-                        showBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SizedBox(
-                                height: 200,
-                                width: double.infinity,
-                                child: Card(
-                                  color: Colors.blue.shade100,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      ListTile(
-                                        title: const Text('Labim Mall',
-                                            style: TextStyle(
-                                                fontSize: 40,
-                                                fontWeight: FontWeight.bold)),
-                                        subtitle:
-                                            const Text('Pulchowk, Lalitpur'),
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          SizedBox(width: 15, height: 20),
-                                          Text(
-                                            '300 km away',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Text('Rs. 10 per hour',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15)),
-                                          SizedBox(
-                                            width: 30,
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ParkinglotScreen())),
-                                            child: Text(
-                                              "Visit",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            });
                       }),
                 ),
                 Marker(
-                  point: LatLng(_currentPosition?.latitude ?? 0,
-                      _currentPosition?.longitude ?? 0),
+                  point: LatLng(27.7105, 85.3179),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: primaryBlue,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(27.6771, 85.3171);
+                        if (locationpageController._currentPosition != null) {
+                          getDirections(
+                              locationpageController._currentPosition?.latitude ?? 0,
+                              locationpageController._currentPosition?.longitude ?? 0,
+                              27.6771,
+                              85.3171,
+                              locationpageController.points2);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          locationpageController._showMyBottomSheet(context);
+                        }
+                      }),
+                ),
+                Marker(
+                  point: LatLng(27.6994, 85.3129),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: primaryBlue,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(27.6771, 85.3171);
+                        if (locationpageController._currentPosition != null) {
+                          getDirections(
+                              locationpageController._currentPosition?.latitude ?? 0,
+                              locationpageController._currentPosition?.longitude ?? 0,
+                              27.6771,
+                              85.3171,
+                              locationpageController.points1);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          locationpageController._showMyBottomSheet(context);
+                        }
+                      }),
+                ),
+                Marker(
+                  point: LatLng(locationpageController._currentPosition?.latitude ?? 0,
+                      locationpageController._currentPosition?.longitude ?? 0),
                   width: 80,
                   height: 80,
                   builder: (context) => MarkerGestureDetector(

@@ -67,8 +67,7 @@ class ParkinglotController extends GetxController {
   final userData = Rxn<Map<String, dynamic>>();
   final profileData = Rxn<Map<String, dynamic>>();
 
-  var items = ['Activa Scooter', 'Hyundai Car', 'Yatri Bike'];
-  String dropdownvalue = 'Activa Scooter';
+  
   // List<String> vehiclelist = [];
   RxList<String> vehiclelist = <String>[].obs;
   // var selectedDropdown;

@@ -15,7 +15,7 @@ Future<List<LatLng>> getDirections(double startLat, double startLng, double endL
     for (var i = 0; i < geometry.length; i++) {
       points.add(LatLng(geometry[i][1], geometry[i][0]));
     }
-    print(points);
+    // print(points);
     return points;
   } else {
     throw Exception('Failed to get directions');
