@@ -6,7 +6,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'dart:math';
 import 'app_icons.dart';
@@ -215,6 +214,99 @@ class LocationPage extends StatelessWidget {
                         AppIcons.asset_8,
                         size: 35,
                         color: primaryBlue,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(27.6771, 85.3171);
+                        if (locationpageController._currentPosition != null) {
+                          getDirections(
+                              locationpageController
+                                      ._currentPosition?.latitude ??
+                                  0,
+                              locationpageController
+                                      ._currentPosition?.longitude ??
+                                  0,
+                              27.6771,
+                              85.3171,
+                              locationpageController.points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          locationpageController._showMyBottomSheet(
+                              context, 'Labim Mall');
+                        }
+                      }),
+                ),
+                Marker(
+                  point: LatLng(27.7105, 85.3179),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: primaryBlue,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(27.7105, 85.3179);
+                        if (locationpageController._currentPosition != null) {
+                          getDirections(
+                              locationpageController
+                                      ._currentPosition?.latitude ??
+                                  0,
+                              locationpageController
+                                      ._currentPosition?.longitude ??
+                                  0,
+                              27.7105,
+                              85.3179,
+                              locationpageController.points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          locationpageController._showMyBottomSheet(
+                              context, 'Sherpa Mall');
+                        }
+                      }),
+                ),
+                Marker(
+                  point: LatLng(27.6994, 85.3129),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: primaryBlue,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(27.6994, 85.3129);
+                        if (locationpageController._currentPosition != null) {
+                          getDirections(
+                              locationpageController
+                                      ._currentPosition?.latitude ??
+                                  0,
+                              locationpageController
+                                      ._currentPosition?.longitude ??
+                                  0,
+                              27.6994,
+                              85.3129,
+                              locationpageController.points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          locationpageController._showMyBottomSheet(
+                              context, 'Civil Mall');
+                        }
+                      }),
+                ),
+                Marker(
+                  point: LatLng(27.6771, 85.3171),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
                         opticalSize: 40,
                       ),
                       onTap: () {

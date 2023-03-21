@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/home_screen.dart';
 import 'login.dart';
 
@@ -109,7 +108,7 @@ class SigninScreen extends StatelessWidget {
     final loginbutton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: accentBlue,
+      color: const Color(0xff222651),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
@@ -120,7 +119,7 @@ class SigninScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: const Text(
           'Sign Up',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Color(0xffCCE9F2)),
         ),
       ),
     );
@@ -130,16 +129,16 @@ class SigninScreen extends StatelessWidget {
           child: Form(
         key: signinController.formKey,
         child: Container(
-            color: mutedBlue,
+            color: const Color(0xff0078B7),
             child: Padding(
-              padding: const EdgeInsets.all(40),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-                  Image.asset('assets/images/logo2.png', scale: 7),
-                  const SizedBox(height: 60),
+                  Image.asset('assets/images/logo.png', scale: 10),
+                  const SizedBox(height: 20),
                   usernameField,
                   const SizedBox(height: 20),
                   emailField,
@@ -159,14 +158,14 @@ class SigninScreen extends StatelessWidget {
                           const Text(
                             "Already have an account? ",
                             style: const TextStyle(
-                                fontSize: 15, color: accentBlue),
+                                fontSize: 15, color: const Color(0xff222651)),
                           ),
                           const Text(
                             "Login",
                             style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: accentBlue,
+                                color: const Color(0xff222651),
                                 decoration: TextDecoration.underline),
                           )
                         ],
