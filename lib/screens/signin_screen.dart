@@ -21,7 +21,7 @@ class SigninController extends GetxController {
 
   void createUser() async {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/user/register/'),
+      Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/user/register/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

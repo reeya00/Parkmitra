@@ -22,8 +22,8 @@ bool loggedin = false;
 
 void loginUser(String username, String password, Function() onSucess) async {
   final response = await http.post(
-    Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
-    // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
+    // Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
+    Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/api/token/'), //use this for emulator and device this use this------<
     // Uri.http("localhost:8000", "/user/register/"),
     // Uri.parse('http://192.168.0.1:8000/user/register/'),
 
@@ -39,6 +39,7 @@ void loginUser(String username, String password, Function() onSucess) async {
     // User is authenticated
     print('User authenticated');
     final Map<String, dynamic> responseData = json.decode(response.body);
+    // SyncModel model = SyncModel.fromJson(response.body as Map<String, dynamic>>);
     await Hive.openBox('userBox');
     var userBox = Hive.box('userBox');
     userBox.put('accessToken', responseData['access']);
@@ -63,7 +64,7 @@ Future<void> writeUserDataToHive() async {
   final box = Hive.box('userBox');
   final response = await http.get(
       // Uri.parse('https://10cb-202-51-76-43.in.ngrok.io/'),
-      Uri.parse('http://127.0.0.1:8000/parkmitra/userdata/'),
+      Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/parkmitra/userdata/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ' + box.get('accessToken')

@@ -94,6 +94,7 @@ class HomeScreen extends StatelessWidget {
 void logout() async {
   final Box<dynamic> userBox = Hive.box<dynamic>('userBox');
   await userBox.clear();
+  // await userBox.();
 
   // Navigate to the login screen or home screen
   Get.to(() => LoginScree());
