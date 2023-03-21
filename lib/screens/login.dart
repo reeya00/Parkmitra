@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
@@ -62,6 +63,7 @@ Future<void> writeUserDataToHive() async {
   // await Hive.openBox('userBox');
   final box = Hive.box('userBox');
   final response = await http.get(
+      // Uri.parse('https://10cb-202-51-76-43.in.ngrok.io/'),
       Uri.parse('http://127.0.0.1:8000/parkmitra/userdata/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -149,7 +151,7 @@ class _LoginScreeState extends State<LoginScree> {
     final loginbutton = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
-        color: const Color(0xff222651),
+        color: accentBlue,
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
@@ -168,23 +170,23 @@ class _LoginScreeState extends State<LoginScree> {
           },
           padding: const EdgeInsets.all(20),
           child:
-              const Text('Login', style: TextStyle(color: Color(0xffCCE9F2))),
+              const Text('Login', style: TextStyle(color: Colors.white)),
         ));
     return Scaffold(
       body: Center(
           child: Form(
         key: _formkey,
         child: Container(
-            color: const Color(0xff0078B7),
+            color: mutedBlue,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(40),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-                  Image.asset('assets/images/logo.png', scale: 10),
-                  const SizedBox(height: 20),
+                  Image.asset('assets/images/logo2.png', scale: 7),
+                  const SizedBox(height: 60),
                   usernameField,
                   const SizedBox(height: 20),
                   passwordField,
@@ -202,14 +204,14 @@ class _LoginScreeState extends State<LoginScree> {
                           const Text(
                             "Don't have an account? ",
                             style: const TextStyle(
-                                fontSize: 15, color: const Color(0xff222651)),
+                                fontSize: 15, color: accentBlue),
                           ),
                           const Text(
                             "Sign Up",
                             style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xff222651),
+                                color: accentBlue,
                                 decoration: TextDecoration.underline),
                           )
                         ],

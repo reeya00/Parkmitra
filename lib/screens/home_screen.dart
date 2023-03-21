@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/current_location.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -48,6 +49,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryBlue,
         title: Obx(() {
           final data = controller.userData.value;
           if (data != null) {

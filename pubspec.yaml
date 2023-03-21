@@ -37,22 +37,25 @@ dependencies:
   cupertino_icons: ^1.0.2
   latlong2: ^0.8.1
   flutter_map: any
-  flutter_map_marker_cluster: any
+  # flutter_map_marker_cluster: any
   geolocator: ^8.2.0
   permission_handler: ^6.1.1
   http: ^0.13.5
   flutter_polyline_points: ^1.0.0
   intl: ^0.17.0
   open_route_service: ^1.2.2
-  shared_preferences: ^2.0.18
+  # shared_preferences: ^2.0.18
   geocoding: ^2.0.5
   get: ^4.6.5
   hive: ^2.2.3 
   hive_flutter: ^1.1.0
   qr_code_scanner: ^1.0.1
   qr_flutter: ^4.0.0
-  flutter_barcode_scanner: ^2.0.0
+  # flutter_barcode_scanner: ^2.0.0
   polyline: ^1.0.0
+  animated_splash_screen: ^1.2.0
+  page_transition: "^2.0.9"
+  
 
 dev_dependencies:
   flutter_test:
