@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
@@ -23,8 +22,8 @@ bool loggedin = false;
 
 void loginUser(String username, String password, Function() onSucess) async {
   final response = await http.post(
-    Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
-    // Uri.parse('http://10.0.2.2:8000/user/register/'), //use this for emulator and device
+    // Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
+    Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/api/token/'), //use this for emulator and device this use this------<
     // Uri.http("localhost:8000", "/user/register/"),
     // Uri.parse('http://192.168.0.1:8000/user/register/'),
 
@@ -40,6 +39,7 @@ void loginUser(String username, String password, Function() onSucess) async {
     // User is authenticated
     print('User authenticated');
     final Map<String, dynamic> responseData = json.decode(response.body);
+    // SyncModel model = SyncModel.fromJson(response.body as Map<String, dynamic>>);
     await Hive.openBox('userBox');
     var userBox = Hive.box('userBox');
     userBox.put('accessToken', responseData['access']);
@@ -64,7 +64,7 @@ Future<void> writeUserDataToHive() async {
   final box = Hive.box('userBox');
   final response = await http.get(
       // Uri.parse('https://10cb-202-51-76-43.in.ngrok.io/'),
-      Uri.parse('http://127.0.0.1:8000/parkmitra/userdata/'),
+      Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/parkmitra/userdata/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ' + box.get('accessToken')
@@ -151,7 +151,7 @@ class _LoginScreeState extends State<LoginScree> {
     final loginbutton = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
-        color: accentBlue,
+        color: const Color(0xff222651),
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
@@ -170,23 +170,23 @@ class _LoginScreeState extends State<LoginScree> {
           },
           padding: const EdgeInsets.all(20),
           child:
-              const Text('Login', style: TextStyle(color: Colors.white)),
+              const Text('Login', style: TextStyle(color: Color(0xffCCE9F2))),
         ));
     return Scaffold(
       body: Center(
           child: Form(
         key: _formkey,
         child: Container(
-            color: mutedBlue,
+            color: const Color(0xff0078B7),
             child: Padding(
-              padding: const EdgeInsets.all(40),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-                  Image.asset('assets/images/logo2.png', scale: 7),
-                  const SizedBox(height: 60),
+                  Image.asset('assets/images/logo.png', scale: 10),
+                  const SizedBox(height: 20),
                   usernameField,
                   const SizedBox(height: 20),
                   passwordField,
@@ -204,14 +204,14 @@ class _LoginScreeState extends State<LoginScree> {
                           const Text(
                             "Don't have an account? ",
                             style: const TextStyle(
-                                fontSize: 15, color: accentBlue),
+                                fontSize: 15, color: const Color(0xff222651)),
                           ),
                           const Text(
                             "Sign Up",
                             style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: accentBlue,
+                                color: const Color(0xff222651),
                                 decoration: TextDecoration.underline),
                           )
                         ],
