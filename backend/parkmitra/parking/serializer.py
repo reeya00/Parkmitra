@@ -31,10 +31,18 @@ class ParkingSessionSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def add_session(self, validated_data):
-        space = ParkingSpace.objects.get(pk=validated_data['parking_space'])
-        space.is_occupied = True
-        space.occupied_by = validated_data['user']
-        space.save()
+        parking_lot_id = validated_data.pop('parking_lot')
+        parking_lot = ParkingLot.objects.get(pk=parking_lot_id)
+        parking_spaces = parking_lot.spaces.all()
+        
+        for parking_space in parking_spaces:
+            if not parking_space.is_occupied:
+                parking_space_id = parking_space.id
+        
+        # space = ParkingSpace.objects.get(pk=validated_data['parking_space'])
+        # space.is_occupied = True
+        # space.occupied_by = validated_data['user']
+        # space.save()
         instance = self.Meta.model(**validated_data)
         instance.save()
         return instance
@@ -69,3 +77,18 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'vehicle', 'session')
+
+class QRCodeSerializer(serializers.Serializer):
+    qr_code = serializers.CharField()
+    def validate_qr_code(self, value):
+        try:
+            parking_space_id = int(value)
+        except ValueError:
+            raise serializers.ValidationError("Invalid QR code")
+        try:
+            parking_session = ParkingSession.objects.get(parking_space_id=parking_space_id)
+        except ParkingSession.DoesNotExist:
+            raise serializers.ValidationError("Invalid QR code")
+
+        return parking_session
+    
