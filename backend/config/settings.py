@@ -18,7 +18,7 @@ SECRET_KEY = 'django-insecure-0&cqk2&vn-+9sv!wcrn5g68-h(x_sq)ax4(3mtg0p&-op8338b
 # DEBUG = os.environ.get("PARKMITRA_DEBUG","False") == "True"
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.243', '10.0.2.2', '127.0.0.1', 'localhost', 'https://young-lemons-wish-202-166-220-78.loca.lt','10cb-202-51-76-43.in.ngrok.io/']
+ALLOWED_HOSTS = ['192.168.0.243', '10.0.2.2', '127.0.0.1', 'localhost', 'ef51-202-51-76-74.in.ngrok.io']
 # ALLOWED_HOSTS = os.environ.get("PARKMITRA_ALLOWED_HOSTS", "*").split(",")
 
 

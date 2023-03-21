@@ -9,9 +9,33 @@ import 'package:latlong2/latlong.dart';
 import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'dart:math';
+import '../model/model.dart';
 import 'app_icons.dart';
 import 'direction.dart';
 import 'package:get/get.dart';
+
+class PolylineController extends GetxController {
+  final locationpageController = Get.put(LocationPageController());
+
+  final _polylines = <Polyline>[].obs;
+
+  set polylines(value) => _polylines.value = value;
+  List<Polyline> get polylines => _polylines.value;
+
+  void addPolyline() {
+    // print('polyline function entered');
+    final newPolyline = Polyline(
+        points: locationpageController.points,
+        color: Colors.blue.shade900,
+        strokeWidth: 4,
+        strokeCap: StrokeCap.round,
+        borderColor: Colors.black.withOpacity(0.5),
+        borderStrokeWidth: 1);
+
+    _polylines.add(newPolyline);
+    polylines = _polylines.toList();
+  }
+}
 
 class MarkerGestureDetector extends StatelessWidget {
   final Widget child;
@@ -155,36 +179,38 @@ class LocationPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // final parkinglotBox = await Hive.openBox('parkingLot');
     _getCurrentPosition();
   }
 }
 
 class LocationPage extends StatelessWidget {
   final locationpageController = Get.put(LocationPageController());
+  final MapController mapController = MapController();
+  final polylineController = Get.put(PolylineController());
 
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
       child: FlutterMap(
-          options: MapOptions(center: LatLng(27.6771, 85.3171), minZoom: 10.0),
+          options: MapOptions(center: LatLng(27.6771, 85.3171), zoom: 13.0),
+          mapController: mapController,
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               subdomains: ['a', 'b', 'c'],
             ),
             PolylineLayer(
-              // polylineCulling: false,
-              polylines: [
-                Polyline(
-                    points: locationpageController.points,
-                    color: Colors.blue.shade900,
-                    strokeWidth: 4,
-                    strokeCap: StrokeCap.round,
-                    borderColor: Colors.black.withOpacity(0.5),
-                    borderStrokeWidth: 1)
-              ],
-            ),
+                // polylineCulling: false,
+                // polylines: [
+                //   Polyline(
+                //       points: locationpageController.points,
+                //       color: Colors.blue.shade900,
+                //       strokeWidth: 4,
+                //       strokeCap: StrokeCap.round,
+                //       borderColor: Colors.black.withOpacity(0.5),
+                //       borderStrokeWidth: 1)
+                // ],
+                polylines: polylineController.polylines),
             // ignore: prefer_const_constructors
             MarkerLayer(
               markers: [
@@ -218,7 +244,7 @@ class LocationPage extends StatelessWidget {
                         opticalSize: 40,
                       ),
                       onTap: () {
-                        print("markertapped");
+                        print("labimMall markertapped");
                         writeParkinglotDataToHive(27.6771, 85.3171);
                         if (locationpageController._currentPosition != null) {
                           getDirections(
@@ -231,6 +257,8 @@ class LocationPage extends StatelessWidget {
                               27.6771,
                               85.3171,
                               locationpageController.points);
+                          mapController.move(LatLng(27.6771, 85.3171), 13);
+                          polylineController.addPolyline();
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
                           locationpageController._showMyBottomSheet(
                               context, 'Labim Mall');
@@ -249,7 +277,7 @@ class LocationPage extends StatelessWidget {
                         opticalSize: 40,
                       ),
                       onTap: () {
-                        print("markertapped");
+                        print("SherpaMall markertapped");
                         writeParkinglotDataToHive(27.7105, 85.3179);
                         if (locationpageController._currentPosition != null) {
                           getDirections(
@@ -263,6 +291,7 @@ class LocationPage extends StatelessWidget {
                               85.3179,
                               locationpageController.points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          polylineController.addPolyline();
                           locationpageController._showMyBottomSheet(
                               context, 'Sherpa Mall');
                         }
@@ -280,7 +309,7 @@ class LocationPage extends StatelessWidget {
                         opticalSize: 40,
                       ),
                       onTap: () {
-                        print("markertapped");
+                        print("CivilMall markertapped");
                         writeParkinglotDataToHive(27.6994, 85.3129);
                         if (locationpageController._currentPosition != null) {
                           getDirections(
@@ -294,6 +323,7 @@ class LocationPage extends StatelessWidget {
                               85.3129,
                               locationpageController.points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                          polylineController.addPolyline();
                           locationpageController._showMyBottomSheet(
                               context, 'Civil Mall');
                         }

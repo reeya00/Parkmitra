@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:parkmitra/screens/active_screen.dart';
 import 'login.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -26,7 +27,7 @@ import 'home_screen.dart';
 
 Future<void> writeParkinglotDataToHive(double lat, double lng) async {
   print('writeparkinglotdatatohive entered');
-  final parkinglotBox = await Hive.openBox('parkingLot');
+  final parkinglotBox = await Hive.box('parkingLot');
   final response =
       await http.get(Uri.parse('http://127.0.0.1:8000/parkmitra/parkinglots/'));
   if (response.statusCode == 200) {
@@ -56,7 +57,7 @@ Future<void> writeParkinglotDataToHive(double lat, double lng) async {
         'parkingSpaces': parkingSpaces
       });
     }
-    parkinglotBox.close();
+
   } else {
     throw Exception('Failed to load data');
   }
@@ -67,7 +68,6 @@ class ParkinglotController extends GetxController {
   final userData = Rxn<Map<String, dynamic>>();
   final profileData = Rxn<Map<String, dynamic>>();
 
-  
   // List<String> vehiclelist = [];
   RxList<String> vehiclelist = <String>[].obs;
   // var selectedDropdown;
@@ -141,6 +141,14 @@ class ParkinglotController extends GetxController {
     print(vehiclelist);
     print(selectedDropdown);
     // String dropdownvalue = 'Activa Scooter';
+
+  }
+
+  @override
+  void dispose() {
+    Hive.box('parkingLot').close();
+    Hive.box('userBox').close();
+    super.dispose();
   }
 }
 
@@ -380,7 +388,7 @@ class ParkinglotScreen extends StatelessWidget {
                                   dateTime_end.toIso8601String();
                               print(iso8601string_start + '000Z');
                               print(iso8601string_end + '000Z');
-                              final userBox = await Hive.openBox('userBox');
+                              final userBox = await Hive.box('userBox');
                               // final parkingLotBox =
                               //     await Hive.openBox('parkingLot');
                               // print(parkingLotBox.get('parkingSessions'));
@@ -405,6 +413,7 @@ class ParkinglotScreen extends StatelessWidget {
                                 print("Parking Spot booked successfully");
                                 Get.snackbar('Success', 'Booking Successful');
                               }
+                              Get.back();
                             },
                             child: Text(
                               'Book',
