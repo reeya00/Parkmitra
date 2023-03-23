@@ -55,6 +55,7 @@ dependencies:
   polyline: ^1.0.0
   animated_splash_screen: ^1.2.0
   page_transition: "^2.0.9"
+  flutter_svg: ^0.22.0
   
 
 dev_dependencies:

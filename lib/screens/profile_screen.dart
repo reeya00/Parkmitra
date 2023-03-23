@@ -215,6 +215,7 @@ class ProfileScreen extends StatelessWidget {
     RxList<dynamic> vehiclesRx;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Profile'),
       ),
       body: Column(

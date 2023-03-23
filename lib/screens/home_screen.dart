@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/current_location.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -12,13 +13,13 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    // final userBox = Hive.openBox('userBox');
     fetchUserData().then((data) => userData.value = data);
   }
 }
 
 Future<Map<String, dynamic>> fetchUserData() async {
-  final userBox = Hive.box('userBox');
+  final userBox = await Hive.box('userBox');
   final id = userBox.get('id');
   final username = userBox.get('username');
   final accessToken = userBox.get('accessToken');
@@ -48,13 +49,16 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userBox;
     return Scaffold(
       appBar: AppBar(
         title: Obx(() {
           final data = controller.userData.value;
+          userBox = Hive.box('userBox');
+
           if (data != null) {
             return Text(
-              data['username'],
+              userBox.get('username'),
               style: const TextStyle(fontSize: 25),
             );
           } else if (data == null) {
@@ -71,12 +75,12 @@ class HomeScreen extends StatelessWidget {
                 Get.defaultDialog(
                   title: 'Confirm Logout',
                   middleText: 'Are you sure you want to logout?',
-                  confirmTextColor: Colors.white,
+                  confirmTextColor: mutedBlue,
                   onConfirm: () async {
                     logout();
                   },
                   textConfirm: 'Logout',
-                  cancelTextColor: Colors.blue,
+                  cancelTextColor: primaryBlue,
                   // onCancel: () => Get.back(),
                   textCancel: 'Cancel',
                 );
@@ -96,8 +100,10 @@ class HomeScreen extends StatelessWidget {
 void logout() async {
   final Box<dynamic> userBox = Hive.box<dynamic>('userBox');
   await userBox.clear();
+  print('logged out');
+  print(userBox.get('username'));
   // await userBox.();
 
   // Navigate to the login screen or home screen
-  Get.to(() => LoginScree());
+  Get.off(() => LoginScree());
 }

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+# from parking.models import ParkingSession
 from .models import Vehicle, ParkingSession, ParkingLot, ParkingSpace
 from ..users.models import CustomUser
 from django.conf import settings

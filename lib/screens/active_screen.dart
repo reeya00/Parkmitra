@@ -12,6 +12,7 @@ class ActiveScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blueAccent,
         title: const Text('Vehicle Details'),
         actions: [
