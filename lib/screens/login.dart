@@ -45,6 +45,7 @@ void loginUser(String username, String password, Function() onSucess) async {
     userBox.put('refreshToken', responseData['refresh']);
     print(userBox.get('accessToken'));
     print(userBox.get('refreshToken'));
+    writeUserDataToHive();
     final temp = 'Bearer ' + Globals.access_token;
     Get.snackbar('Sucess', 'Logged In');
     onSucess();
@@ -72,7 +73,6 @@ Future<void> writeUserDataToHive() async {
     box.put('username', responseData['username']);
     box.put('firstName', responseData['firstName']);
     box.put('lastName', responseData['lastName']);
-    box.put('email', responseData['email']);
     box.put('email', responseData['email']);
     box.put('isActive', responseData['isActive']);
     box.put('vehicle', responseData['vehicle']);
@@ -154,7 +154,6 @@ class _LoginScreeState extends State<LoginScree> {
           onPressed: () {
             if (_formkey.currentState!.validate()) {
               loginUser(usernameController.text, passwordController.text, () {
-                writeUserDataToHive();
                 Get.to(() => NavBar());
                 _formkey.currentState!.save();
               });

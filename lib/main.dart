@@ -15,9 +15,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
-  await Hive.openBox<User>('user');
+  await Hive.openBox('user');
   Hive.registerAdapter(ParkingLotAdapter());
-  await Hive.openBox<ParkingLot>('parkingLot');
+  await Hive.openBox('parkingLot');
 
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
