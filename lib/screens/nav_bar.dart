@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:parkmitra/screens/active_screen.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/current_location.dart';
 import 'package:parkmitra/screens/home_screen.dart';
 import 'package:parkmitra/screens/profile_screen.dart';
@@ -54,32 +55,32 @@ class _NavBarState extends State<NavBar> {
           child: BottomNavigationBar(
               onTap: onTap,
               currentIndex: currentIndex,
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: primaryBlue,
               iconSize: 25,
               // selectedFontSize: 20,
               selectedIconTheme: IconThemeData(color: Colors.white, size: 30),
               selectedItemColor: Colors.white,
               selectedLabelStyle: TextStyle(color: Colors.white),
-              unselectedIconTheme: IconThemeData(color: Color(0xff222651)),
+              unselectedIconTheme: IconThemeData(color: accentBlue),
               showUnselectedLabels: false,
               items: const [
                 BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Home',
-                    backgroundColor: Color(0xff222651)),
+                    backgroundColor: accentBlue),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.query_builder_rounded,
                   ),
                   label: 'Active',
-                  backgroundColor: Color(0xff222651),
+                  backgroundColor: accentBlue,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.account_circle,
                   ),
                   label: 'Profile',
-                  backgroundColor: Color(0xff222651),
+                  backgroundColor: accentBlue,
                 ),
               ]),
         ),

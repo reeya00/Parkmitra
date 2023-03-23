@@ -10,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'model/model.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -21,7 +22,7 @@ void main() async {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     home: AnimatedSplashScreen(
-    splash: Image.asset('assets/images/logo2.png'),
+    splash: SvgPicture.asset('assets/images/logo1.svg'),
     splashIconSize: 100,
     nextScreen: LoginScree(),
     splashTransition: SplashTransition.fadeTransition,

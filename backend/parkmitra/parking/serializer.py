@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+# from parking.models import ParkingSession
 from .models import Vehicle, ParkingSession, ParkingLot, ParkingSpace
 from ..users.models import CustomUser
 from django.conf import settings
@@ -69,3 +71,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'vehicle', 'session')
+    
+class QRCodeSerializer(serializers.Serializer):
+    qr_code = serializers.CharField()
+    def validate_qr_code(self, value):
+        try:
+            parking_space_id = int(value)
+        except ValueError:
+            raise serializers.ValidationError("Invalid QR code")
+        try:
+            parking_session = ParkingSession.objects.get(parking_space_id=parking_space_id)
+        except ParkingSession.DoesNotExist:
+            raise serializers.ValidationError("Invalid QR code")
+
+        return parking_session

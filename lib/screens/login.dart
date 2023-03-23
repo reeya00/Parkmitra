@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_declarations
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/signin_screen.dart';
 import 'nav_bar.dart';
 import 'dart:convert';
@@ -23,7 +25,7 @@ bool loggedin = false;
 void loginUser(String username, String password, Function() onSucess) async {
   final response = await http.post(
     // Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
-    Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/api/token/'), //use this for emulator and device this use this------<
+    Uri.parse('https://f160-202-51-76-79.in.ngrok.io/api/token/'), //use this for emulator and device this use this------<
     // Uri.http("localhost:8000", "/user/register/"),
     // Uri.parse('http://192.168.0.1:8000/user/register/'),
 
@@ -64,7 +66,7 @@ Future<void> writeUserDataToHive() async {
   final box = Hive.box('userBox');
   final response = await http.get(
       // Uri.parse('https://10cb-202-51-76-43.in.ngrok.io/'),
-      Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/parkmitra/userdata/'),
+      Uri.parse('https://f160-202-51-76-79.in.ngrok.io/parkmitra/userdata/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ' + box.get('accessToken')
@@ -151,7 +153,7 @@ class _LoginScreeState extends State<LoginScree> {
     final loginbutton = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
-        color: const Color(0xff222651),
+        color: accentBlue,
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
@@ -170,14 +172,14 @@ class _LoginScreeState extends State<LoginScree> {
           },
           padding: const EdgeInsets.all(20),
           child:
-              const Text('Login', style: TextStyle(color: Color(0xffCCE9F2))),
+              const Text('Login', style: TextStyle(color: mutedBlue)),
         ));
     return Scaffold(
       body: Center(
           child: Form(
         key: _formkey,
         child: Container(
-            color: const Color(0xff0078B7),
+            color: mutedBlue,
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -185,7 +187,8 @@ class _LoginScreeState extends State<LoginScree> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-                  Image.asset('assets/images/logo.png', scale: 10),
+                  SvgPicture.asset('assets/images/logo1.svg'),
+                  // Image.asset('assets/images/logo.png', scale: 10),
                   const SizedBox(height: 20),
                   usernameField,
                   const SizedBox(height: 20),
@@ -204,14 +207,14 @@ class _LoginScreeState extends State<LoginScree> {
                           const Text(
                             "Don't have an account? ",
                             style: const TextStyle(
-                                fontSize: 15, color: const Color(0xff222651)),
+                                fontSize: 15, color: accentBlue),
                           ),
                           const Text(
                             "Sign Up",
                             style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xff222651),
+                                color: accentBlue,
                                 decoration: TextDecoration.underline),
                           )
                         ],
