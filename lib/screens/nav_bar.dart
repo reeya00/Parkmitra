@@ -33,18 +33,21 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[currentIndex],
-      bottomNavigationBar: Container(
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+      children:[
+      pages[currentIndex],
+      Container(
         // padding:EdgeInsets.only(bottom: 20) ,
         padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-        height: 90,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+        height: 80,
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.only(
+        //       topRight: Radius.circular(30), topLeft: Radius.circular(30)),
           // boxShadow: [
           //   BoxShadow(color: Color.fromARGB(95, 46, 46, 46), spreadRadius: 0, blurRadius: 10),
           // ],
-        ),
+        // ),
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30.0),
@@ -84,7 +87,11 @@ class _NavBarState extends State<NavBar> {
                 ),
               ]),
         ),
-      ),
+      ),])
     );
   }
 }
+
+
+
+
