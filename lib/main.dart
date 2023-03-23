@@ -21,14 +21,14 @@ void main() async {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     home: AnimatedSplashScreen(
-    splash: Image.asset('assets/images/logo2.png'),
-    splashIconSize: 100,
-    nextScreen: LoginScree(),
-    splashTransition: SplashTransition.fadeTransition,
-    pageTransitionType: PageTransitionType.bottomToTop,
-    backgroundColor: mutedBlue,
-    duration: 3000,
-  ),
+      splash: Image.asset('assets/images/logo2.png'),
+      splashIconSize: 100,
+      nextScreen: LoginScree(),
+      splashTransition: SplashTransition.fadeTransition,
+      pageTransitionType: PageTransitionType.bottomToTop,
+      backgroundColor: mutedBlue,
+      duration: 3000,
+    ),
   ));
 }
 

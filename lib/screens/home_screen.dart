@@ -19,6 +19,7 @@ class HomeController extends GetxController {
 
 Future<Map<String, dynamic>> fetchUserData() async {
   final userBox = Hive.box('userBox');
+  final id = userBox.get('id');
   final username = userBox.get('username');
   final accessToken = userBox.get('accessToken');
   final vehicle = userBox.get('vehicle');
@@ -30,6 +31,7 @@ Future<Map<String, dynamic>> fetchUserData() async {
 
   // print('function entered');
   return {
+    'id': id,
     'username': username,
     'accessToken': accessToken,
     'vehicle': vehicle,

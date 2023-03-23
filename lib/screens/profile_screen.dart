@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'home_screen.dart';
+import 'globals.dart';
 
 class Vehicle {
   final String name;
@@ -27,7 +28,6 @@ class ProfileScreenController extends GetxController {
   @override
   void onInit() {
     fetchUserData().then((data) => profileData.value = data);
-
     // super.onInit();
   }
 }
@@ -49,9 +49,11 @@ class ProfileScreen extends StatelessWidget {
       print('box in making');
       var userBox = await Hive.openBox('userBox');
       final accesstoken = userBox.get('accessToken');
+      print(userBox);
+      final String id = userBox.get('id').toString();
       // final ownerID = userBox.get('id');
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/parkmitra/addvehicle/'),
+        Uri.parse(baseUrl + 'parkmitra/addvehicle/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ' + accesstoken
@@ -62,7 +64,7 @@ class ProfileScreen extends StatelessWidget {
           "vehicle_model": vehicleModel,
           "color": vehicleColor,
           "plate_number": numberPlate,
-          "owner": "2"
+          "owner": id
         }),
       );
       if (response.statusCode == 201) {
@@ -176,7 +178,6 @@ class ProfileScreen extends StatelessWidget {
                     print(type);
                   },
                   child: Icon(
-                    //<-- SEE HERE
                     Icons.directions_car,
                     color: Colors.white,
                     size: 30,

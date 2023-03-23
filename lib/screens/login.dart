@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'globals.dart';
 
 //use cubit for state management
 class Globals {
@@ -22,11 +23,7 @@ bool loggedin = false;
 
 void loginUser(String username, String password, Function() onSucess) async {
   final response = await http.post(
-    // Uri.parse('http://127.0.0.1:8000/api/token/'), //use this for web
-    Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/api/token/'), //use this for emulator and device this use this------<
-    // Uri.http("localhost:8000", "/user/register/"),
-    // Uri.parse('http://192.168.0.1:8000/user/register/'),
-
+    Uri.parse(baseUrl + 'api/token/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -62,9 +59,7 @@ void loginUser(String username, String password, Function() onSucess) async {
 Future<void> writeUserDataToHive() async {
   // await Hive.openBox('userBox');
   final box = Hive.box('userBox');
-  final response = await http.get(
-      // Uri.parse('https://10cb-202-51-76-43.in.ngrok.io/'),
-      Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/parkmitra/userdata/'),
+  final response = await http.get(Uri.parse(baseUrl + 'parkmitra/userdata/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ' + box.get('accessToken')

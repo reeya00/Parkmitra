@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:parkmitra/screens/home_screen.dart';
 import 'login.dart';
+import 'globals.dart';
 
 class SigninController extends GetxController {
   late TextEditingController usernameController;
@@ -21,7 +22,7 @@ class SigninController extends GetxController {
 
   void createUser() async {
     final response = await http.post(
-      Uri.parse('https://23c3-202-51-76-74.in.ngrok.io/user/register/'),
+      Uri.parse(baseUrl + 'user/register/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

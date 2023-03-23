@@ -10,10 +10,11 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'home_screen.dart';
+import 'globals.dart';
 
 // Future<void> writeParkinglotDataToHive(double lat, double lng) async {
 //   final response =
-//       await http.get(Uri.parse('http://127.0.0.1:8000/parkmitra/parkinglots/'));
+//       await http.get(Uri.parse(baseUrl + 'parkmitra/parkinglots/'));
 //   if (response.statusCode == 200) {
 //     final parkinglotBox = await Hive.box('parkingLot');
 //     final data = json.decode(response.body);
@@ -27,8 +28,8 @@ import 'home_screen.dart';
 Future<void> writeParkinglotDataToHive(double lat, double lng) async {
   print('writeparkinglotdatatohive entered');
   final parkinglotBox = await Hive.openBox('parkingLot');
-  final response =
-      await http.get(Uri.parse('http://127.0.0.1:8000/parkmitra/parkinglots/'));
+  final response = await http.get(Uri.parse(
+      baseUrl + 'parkmitra/parkinglots/'));
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
     String parkinglotName = "";
@@ -67,7 +68,6 @@ class ParkinglotController extends GetxController {
   final userData = Rxn<Map<String, dynamic>>();
   final profileData = Rxn<Map<String, dynamic>>();
 
-  
   // List<String> vehiclelist = [];
   RxList<String> vehiclelist = <String>[].obs;
   // var selectedDropdown;
@@ -388,7 +388,7 @@ class ParkinglotScreen extends StatelessWidget {
                               final userID = userBox.get('id');
                               final postResponse = await http.post(
                                   Uri.parse(
-                                      'http://127.0.0.1:8000/parkmitra/sessions/add'),
+                                      baseUrl + 'parkmitra/sessions/add'),
                                   headers: <String, String>{
                                     'Content-Type':
                                         'application/json; charset=UTF-8',
