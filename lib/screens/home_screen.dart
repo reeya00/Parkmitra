@@ -49,13 +49,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userBox;
+    var userBox = Hive.box('userBox');
     return Scaffold(
       appBar: AppBar(
         title: Obx(() {
           final data = controller.userData.value;
-          userBox = Hive.box('userBox');
-
           if (data != null) {
             return Text(
               userBox.get('username'),

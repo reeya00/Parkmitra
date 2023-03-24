@@ -211,7 +211,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var vehicles = <dynamic>[];
-    var userBox;
+    var userBox = Hive.box('userBox');
     RxList<dynamic> vehiclesRx;
     return Scaffold(
       appBar: AppBar(
@@ -233,7 +233,8 @@ class ProfileScreen extends StatelessWidget {
               )),
           SizedBox(height: 20),
           Text(
-            profilescreenController.profileData.value!['username'],
+            // profilescreenController.profileData.value!['username'],
+            userBox.get('username'),
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
