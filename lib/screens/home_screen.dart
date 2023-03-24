@@ -30,7 +30,7 @@ Future<Map<String, dynamic>> fetchUserData() async {
   final refreshToken = userBox.get('refreshToken');
   final session = userBox.get('session');
 
-  // print('function entered');
+  print('fetchuserdata entered $username');
   return {
     'id': id,
     'username': username,

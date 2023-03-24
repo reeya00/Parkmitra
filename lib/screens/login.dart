@@ -23,11 +23,11 @@ TextStyle myStyle = const TextStyle(fontSize: 15);
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 bool loggedin = false;
 
-void loginUser(String username, String password, Function() onSucess) async {
+Future loginUser(String username, String password, Function() onSucess) async {
   final response = await http.post(
     // Uri.parse('https://6ff2-110-44-115-169.in.ngrok.io/api/token/'),
     Uri.parse(baseUrl + 'api/token/'),
-    
+
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -82,6 +82,8 @@ Future<void> writeUserDataToHive() async {
   } else {
     throw Exception('Failed to load data');
   }
+  print('from writeuser data');
+  print(box.get('username'));
 }
 
 class LoginScree extends StatefulWidget {
@@ -153,16 +155,14 @@ class _LoginScreeState extends State<LoginScree> {
         color: accentBlue,
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
+          onPressed: () async {
             if (_formkey.currentState!.validate()) {
-              loginUser(usernameController.text, passwordController.text, () {
-                writeUserDataToHive();
-                Get.to(() => NavBar());
-                _formkey.currentState!.save();
+              await loginUser(usernameController.text, passwordController.text, () {
+                // Do nothing on success
               });
-              // Future.delayed(Duration(seconds: 10));
-
-              // CircularProgressIndicator();
+              await writeUserDataToHive();
+              Get.offAll(() => NavBar());
+              _formkey.currentState!.save();
             } else {
               Get.snackbar('Error', 'Wrong Credentials');
             }

@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/parkinglot_screen.dart';
 import 'dart:math';
 import 'app_icons.dart';
@@ -154,68 +156,118 @@ class _LocationPageState extends State<LocationPage> {
                           getDirections(_currentPosition?.latitude ??0,_currentPosition?.longitude??0, 27.6771, 85.3171,points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
                         }
-                        showBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SizedBox(
-                                height: 200,
-                                width: double.infinity,
-                                child: Card(
-                                  color: Colors.blue.shade100,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      ListTile(
-                                        title: const Text('Labim Mall',
-                                            style: TextStyle(
-                                                fontSize: 40,
-                                                fontWeight: FontWeight.bold)),
-                                        subtitle:
-                                            const Text('Pulchowk, Lalitpur'),
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          SizedBox(width: 15, height: 20),
-                                          Text(
-                                            '300 km away',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Text('Rs. 10 per hour',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15)),
-                                          SizedBox(
-                                            width: 30,
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ParkinglotScreen())),
-                                            child: Text(
-                                              "Visit",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                        Get.bottomSheet(
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade500,
+                                blurRadius: 5,
+                                spreadRadius: 1,
+                                offset: Offset(0, 1),
+                              )
+                            ],
+                          ),
+                          height: 280,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 20),
+                              ListTile(
+                                title: Text(
+                                  'Labim Mall',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              );
-                            });
+                                subtitle: Text(
+                                  'Pulchowk, Lalitpur',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // SizedBox(width: 1,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Distance',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey.shade800,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        '300 km',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Price',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey.shade800,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Rs. 10 per hour',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 24,),
+                              Material(
+                                elevation: 5.0,
+                                borderRadius: BorderRadius.circular(30.0),
+                                color: primaryBlue,
+                                child:MaterialButton(
+                                minWidth: MediaQuery.of(context).size.width,
+                                    onPressed: () => Get.to(ParkinglotScreen()),
+                                    child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                          child: Text(
+                                            'Visit',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold, color: Colors.white
+                                            ),
+                                          ),
+                                        ),
+                                                        
+                                        ),
+                                  ),
+                            ],
+                          ),
+                        ),
+                      );
+
                       }),
                 ),
                 Marker(
