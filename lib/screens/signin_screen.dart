@@ -132,7 +132,7 @@ class SigninScreen extends StatelessWidget {
           child: Form(
         key: signinController.formKey,
         child: Container(
-            color: primaryBlue,
+            color: mutedBlue,
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(

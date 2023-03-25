@@ -72,7 +72,7 @@ class QRScannerEntryController extends GetxController {
                 'Content-Type': 'application/json; charset=UTF-8',
               },
               body: jsonEncode(<String, String>{
-                'qr_code': spaceList[index - 1],
+                'qr_code': spaceList[index - 1].toString(),
               }));
 
       if (response.statusCode == 200) {
@@ -153,20 +153,24 @@ class QRScannerExitController extends GetxController {
                 'Content-Type': 'application/json; charset=UTF-8',
               },
               body: jsonEncode(<String, String>{
-                'qr_code': spaceList[index - 1],
+                'qr_code': spaceList[index - 1].toString(),
               }));
-
+      
       if (response.statusCode == 200) {
-        print(response.body);
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        print('ree');
+        print(responseData);
+        fee = responseData['fee'];
+        await initpayment(fee);
       } else {
         print('Error: ${response.statusCode}');
       }
 
       // Dispose of the QR controller and navigate back to the previous page
       controller.dispose();
-      Get.back(result: scanData);
+      // await initpayment(20.56);
+      // Get.back(result: scanData);
     });
-    initpayment(fee);
   }
 }
 

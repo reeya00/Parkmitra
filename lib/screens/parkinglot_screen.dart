@@ -100,7 +100,7 @@ class ParkinglotController extends GetxController {
   }
 
   double findPrice(Duration duration) {
-    final double rate = 1.5;
+    final double rate = 0.33;
     final double price = duration.inMinutes * rate;
     return price;
   }
@@ -162,11 +162,11 @@ class ParkinglotScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           SizedBox(
-                            width: 20,
+                            width: 80,
                           ),
-                          // Text(parkinglotController.parkinglotData.value?['rate'],
-                          //     style: TextStyle(
-                          //         fontWeight: FontWeight.bold, fontSize: 15)),
+                          Text('Rs.20 per hour',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       )
                     ],
@@ -193,9 +193,9 @@ class ParkinglotScreen extends StatelessWidget {
                       Text(
                         'Book a Spot',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
+                            fontWeight: FontWeight.bold, fontSize: 26),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 40),
                       Text(
                         'Select a Vehicle',
                         style: TextStyle(
@@ -231,15 +231,15 @@ class ParkinglotScreen extends StatelessWidget {
                           )),
                       SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             'Entry Time',
                             style: TextStyle(fontSize: 12),
                           ),
-                          // SizedBox(
-                          //   width: 100,
-                          // ),
+                          SizedBox(
+                            width: 130,
+                          ),
                           Text(
                             'Exit Time',
                             style: TextStyle(fontSize: 12),
@@ -308,7 +308,7 @@ class ParkinglotScreen extends StatelessWidget {
                           )),
                         ],
                       ),
-                      SizedBox(height: 40),
+                      SizedBox(height: 80),
                       Text(
                         'Time Difference: ${parkinglotController.calcdifference}',
                         style: TextStyle(
@@ -320,7 +320,7 @@ class ParkinglotScreen extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                      SizedBox(height: 1),
+                      SizedBox(height: 80),
                       Expanded(
                           child: Material(
                         elevation: 5.0,
@@ -328,6 +328,7 @@ class ParkinglotScreen extends StatelessWidget {
                         color: primaryBlue,
                         child: MaterialButton(
                           minWidth: MediaQuery.of(context).size.width,
+                          height: 20,
                           onPressed: () async {
                             // Book Parking Lot
                             print('onpressed clicked book');
@@ -395,7 +396,8 @@ class ParkinglotScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ))
+                      )),
+                      SizedBox(height: 10,)
                     ],
                   ),
                 ),

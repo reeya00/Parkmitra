@@ -67,6 +67,7 @@ def calculate_parking_fee(entry_time, exit_time, rate_per_hour):
 
 class QRCodeEntryValidationView(views.APIView):
     queryset = ParkingSession.objects.all()
+    permission_classes = [permissions.AllowAny]
     def post(self, request, format=None):
         serializer = QRCodeSerializer(data=request.data)
         if serializer.is_valid():
@@ -80,13 +81,14 @@ class QRCodeEntryValidationView(views.APIView):
 
 class QRCodeExitValidationView(views.APIView):
     queryset = ParkingSession.objects.all()
+    permission_classes = [permissions.AllowAny]
     def post(self, request, format=None):
         serializer = QRCodeSerializer(data=request.data)
         if serializer.is_valid():
             parking_session = serializer.validated_data['qr_code']
             # Set exit time
-            parking_session.exit_time = datetime.datetime.now(timezone.utc)
-            # parking_session.exit_time = datetime.datetime(year=2023, month=3, day=21, hour=10, minute=17, second=40, microsecond=435345, tzinfo=timezone.utc )
+            # parking_session.exit_time = datetime.datetime.now(timezone.utc)
+            parking_session.exit_time = datetime.datetime(year=2023, month=3, day=26, hour=10, minute=17, second=40, microsecond=435345, tzinfo=timezone.utc )
             parking_session.save()
 
             # Calculate parking fee
