@@ -40,7 +40,7 @@ class _NavBarState extends State<NavBar> {
       Container(
         // padding:EdgeInsets.only(bottom: 20) ,
         padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-        height: 80,
+        height: 90,
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.only(
         //       topRight: Radius.circular(30), topLeft: Radius.circular(30)),

@@ -83,7 +83,7 @@ Future<void> writeUserDataToHive() async {
     throw Exception('Failed to load data');
   }
   print('from writeuser data');
-  print(box.get('username'));
+  print(box.get('session'));
 }
 
 class LoginScree extends StatefulWidget {

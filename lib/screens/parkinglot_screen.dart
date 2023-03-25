@@ -6,12 +6,15 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:parkmitra/model/model.dart';
+import 'package:parkmitra/screens/active_screen.dart';
+import 'package:parkmitra/screens/nav_bar.dart';
 import 'login.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'home_screen.dart';
 import 'globals.dart';
+import 'dart:math';
 
 Future<void> writeParkinglotDataToHive(double lat, double lng) async {
   print('writeparkinglotdatatohive entered');
@@ -357,6 +360,8 @@ class ParkinglotScreen extends StatelessWidget {
                               // print(parkingLotBox.get('parkingSessions'));
                               final accesstoken = userBox.get('accessToken');
                               final userID = userBox.get('id');
+                              Random random = new Random();
+                              int parkingSpace = random.nextInt(10);
                               final postResponse = await http.post(
                                   Uri.parse(baseUrl + 'parkmitra/sessions/add'),
                                   headers: <String, String>{
@@ -369,15 +374,17 @@ class ParkinglotScreen extends StatelessWidget {
                                     "vehicle": parkinglotController
                                         .selectedVehicleId
                                         .toString(),
-                                    "parking_space": "1",
+                                    "parking_space": parkingSpace.toString(),
                                     "entry_time": iso8601string_start + '000Z',
                                     "exit_time": iso8601string_end + '000Z'
                                   }));
                               if (postResponse.statusCode == 201) {
+                                writeUserDataToHive();
                                 print(postResponse.body);
                                 print("Parking Spot booked successfully");
                                 Get.snackbar('Success', 'Booking Successful');
                               }
+                              Get.offAll(() => NavBar());
                             },
                             child: Text(
                               'Book',
