@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'constants.dart';
 import 'home_screen.dart';
 import 'globals.dart';
 
@@ -264,11 +265,26 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: _addVehicle,
-            child: Text('Add Vehicle'),
+          Material(
+          elevation: 5.0,
+          borderRadius: BorderRadius.circular(30.0),
+          color: primaryBlue,
+          child:MaterialButton(
+            onPressed: () {
+            // Handle "Pay Now" button press
+            _addVehicle();
+          },
+          child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          child: Text(
+            'Add Vehicle',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          SizedBox(height: 50),
+        ),
+            )
+            ),
+          SizedBox(height: 100),
         ],
       ),
     );

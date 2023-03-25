@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
-class QRCodeScanner extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _QRCodeScannerState();
-}
+import 'globals.dart';
 
-class _QRCodeScannerState extends State<QRCodeScanner> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  QRViewController? controller;
 
+class QRCodeScanner extends StatelessWidget {
+  final qrscannerController = Get.put(QRScannerController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +25,13 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           Expanded(
             flex: 1,
             child: Center(
-              child: (result != null)
-                  ? Text(
-                      'Barcode Type: ${(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a QR Code'),
+              child: Obx(() {
+                final result = QRScannerController.to.result.value;
+                return result != null
+                    ? Text(
+                        'Barcode Type: ${result.format}   Data: ${result.code}')
+                    : Text('Scan a QR Code');
+              }),
             ),
           ),
         ],
@@ -41,8 +41,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   Widget _buildQrView(BuildContext context) {
     return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
+      key: QRScannerController.to.qrKey,
+      onQRViewCreated: QRScannerController.to.onQRViewCreated,
       overlay: QrScannerOverlayShape(
         borderRadius: 10,
         borderColor: Colors.red,
@@ -52,19 +52,32 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       ),
     );
   }
+}
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
-  }
+class QRScannerController extends GetxController {
+  static QRScannerController get to => Get.find();
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final result = Rxn<Barcode>();
+
+  void onQRViewCreated(QRViewController controller) {
+  controller.scannedDataStream.listen((scanData) async {
+    // Send a POST request to some API endpoint with the scanned data as payload
+    final response = await http.post(
+      Uri.parse(baseUrl + 'parking/verifyentry/'),
+      body: {'data': scanData.code},
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+
+    // Dispose of the QR controller and navigate back to the previous page
+    controller.dispose();
+    Get.back(result: scanData);
+  });
+}
+
 }

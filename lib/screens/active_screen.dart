@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'constants.dart';
 import 'globals.dart';
 import 'qr_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -45,32 +46,32 @@ class ActiveScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blueAccent,
-        title: const Text('Vehicle Details'),
+        backgroundColor: primaryBlue,
+        title: const Text('Active Sessions'),
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
-            decoration: BoxDecoration(
-              color: Colors.white24,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: TextButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 200,
-                      child: Center(
-                        child: Text('This is a modal sheet.'),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Text('Status', style: TextStyle(color: Colors.white)),
-            ),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
+          //   decoration: BoxDecoration(
+          //     color: Colors.white24,
+          //     borderRadius: BorderRadius.circular(20),
+          //   ),
+          //   child: TextButton(
+          //     onPressed: () {
+          //       showModalBottomSheet(
+          //         context: context,
+          //         builder: (BuildContext context) {
+          //           return Container(
+          //             height: 200,
+          //             child: Center(
+          //               child: Text('This is a modal sheet.'),
+          //             ),
+          //           );
+          //         },
+          //       );
+          //     },
+          //     child: Text('Status', style: TextStyle(color: Colors.white)),
+          //   ),
+          // ),
         ],
       ),
       body: Column(
@@ -122,14 +123,27 @@ class ActiveScreen extends StatelessWidget {
                     ),),
                     Padding(
                               padding: const EdgeInsets.only(right: 20),
-                              child: ElevatedButton(
-                                onPressed: () {
+                              child: Material(
+                                elevation: 5.0,
+                                borderRadius: BorderRadius.circular(30.0),
+                                color: primaryBlue,
+                                child:MaterialButton(
+                                  onPressed: () {
                                   // Handle "Pay Now" button press
                                   Get.to(() => QRCodeScanner());
                                 },
-                                child: Text('Pay Now'),
+                                child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                                child: Text(
+                                  'Pay Now',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, color: Colors.white),
+                                ),
+                              ),
+                                 )
+                                 )
                               )
-                            )
+                            
                     ])]));
                   },
                 );
