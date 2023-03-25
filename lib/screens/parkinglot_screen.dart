@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:parkmitra/model/model.dart';
 import 'package:parkmitra/screens/active_screen.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/nav_bar.dart';
 import 'login.dart';
 import 'package:get/get.dart';
@@ -139,7 +140,7 @@ class ParkinglotScreen extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 child: Card(
-                  color: Colors.blue.shade100,
+                  color: mutedBlue,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -179,7 +180,7 @@ class ParkinglotScreen extends StatelessWidget {
             Expanded(
               flex: 6,
               child: Container(
-                color: Colors.blue.shade100,
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20.0, vertical: 12.0),
@@ -192,9 +193,9 @@ class ParkinglotScreen extends StatelessWidget {
                       Text(
                         'Book a Spot',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.bold, fontSize: 24),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Text(
                         'Select a Vehicle',
                         style: TextStyle(
@@ -230,19 +231,18 @@ class ParkinglotScreen extends StatelessWidget {
                           )),
                       SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Entry Time',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 12),
+                            style: TextStyle(fontSize: 12),
                           ),
-                          SizedBox(
-                            width: 182,
-                          ),
+                          // SizedBox(
+                          //   width: 100,
+                          // ),
                           Text(
                             'Exit Time',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 12),
+                            style: TextStyle(fontSize: 12),
                           ),
                         ],
                       ),
@@ -269,7 +269,7 @@ class ParkinglotScreen extends StatelessWidget {
                               }
                             },
                             decoration: InputDecoration(
-                              hintText: 'Enter Entry Time',
+                              hintText: 'Entry Time',
                               border: OutlineInputBorder(),
                               suffixIcon: Icon(Icons.timer),
                             ),
@@ -301,14 +301,14 @@ class ParkinglotScreen extends StatelessWidget {
                               }
                             },
                             decoration: InputDecoration(
-                              hintText: 'Enter Exit Time',
+                              hintText: 'Exit Time',
                               border: OutlineInputBorder(),
                               suffixIcon: Icon(Icons.timer),
                             ),
                           )),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 40),
                       Text(
                         'Time Difference: ${parkinglotController.calcdifference}',
                         style: TextStyle(
@@ -320,76 +320,81 @@ class ParkinglotScreen extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                      SizedBox(height: 90),
+                      SizedBox(height: 1),
                       Expanded(
-                          child: Container(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                        width: 400,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32.0),
-                              ),
-                              backgroundColor: Colors.blue,
-                            ),
-                            onPressed: () async {
-                              // Book Parking Lot
-                              print('onpressed clicked book');
-                              DateTime now = DateTime.now();
-                              DateTime dateTime_start = DateTime(
-                                  now.year,
-                                  now.month,
-                                  now.day,
-                                  parkinglotController.starttime.hour,
-                                  parkinglotController.starttime.minute);
-                              String iso8601string_start =
-                                  dateTime_start.toIso8601String();
-                              DateTime dateTime_end = DateTime(
-                                  now.year,
-                                  now.month,
-                                  now.day,
-                                  parkinglotController.endtime.hour,
-                                  parkinglotController.endtime.minute);
-                              String iso8601string_end =
-                                  dateTime_end.toIso8601String();
-                              print(iso8601string_start + '000Z');
-                              print(iso8601string_end + '000Z');
-                              final userBox = await Hive.openBox('userBox');
-                              // final parkingLotBox =
-                              //     await Hive.openBox('parkingLot');
-                              // print(parkingLotBox.get('parkingSessions'));
-                              final accesstoken = userBox.get('accessToken');
-                              final userID = userBox.get('id');
-                              Random random = new Random();
-                              int parkingSpace = random.nextInt(10);
-                              final postResponse = await http.post(
-                                  Uri.parse(baseUrl + 'parkmitra/sessions/add'),
-                                  headers: <String, String>{
-                                    'Content-Type':
-                                        'application/json; charset=UTF-8',
-                                    'Authorization': 'Bearer $accesstoken'
-                                  },
-                                  body: jsonEncode(<String, String>{
-                                    "user": "$userID",
-                                    "vehicle": parkinglotController
-                                        .selectedVehicleId
-                                        .toString(),
-                                    "parking_space": parkingSpace.toString(),
-                                    "entry_time": iso8601string_start + '000Z',
-                                    "exit_time": iso8601string_end + '000Z'
-                                  }));
-                              if (postResponse.statusCode == 201) {
-                                writeUserDataToHive();
-                                print(postResponse.body);
-                                print("Parking Spot booked successfully");
-                                Get.snackbar('Success', 'Booking Successful');
-                              }
-                              Get.offAll(() => NavBar());
-                            },
+                          child: Material(
+                        elevation: 5.0,
+                        borderRadius: BorderRadius.circular(30.0),
+                        color: primaryBlue,
+                        child: MaterialButton(
+                          minWidth: MediaQuery.of(context).size.width,
+                          onPressed: () async {
+                            // Book Parking Lot
+                            print('onpressed clicked book');
+                            DateTime now = DateTime.now();
+                            DateTime dateTime_start = DateTime(
+                                now.year,
+                                now.month,
+                                now.day,
+                                parkinglotController.starttime.hour,
+                                parkinglotController.starttime.minute);
+                            String iso8601string_start =
+                                dateTime_start.toIso8601String();
+                            DateTime dateTime_end = DateTime(
+                                now.year,
+                                now.month,
+                                now.day,
+                                parkinglotController.endtime.hour,
+                                parkinglotController.endtime.minute);
+                            String iso8601string_end =
+                                dateTime_end.toIso8601String();
+                            print(iso8601string_start + '000Z');
+                            print(iso8601string_end + '000Z');
+                            final userBox = await Hive.openBox('userBox');
+                            // final parkingLotBox =
+                            //     await Hive.openBox('parkingLot');
+                            // print(parkingLotBox.get('parkingSessions'));
+                            final accesstoken = userBox.get('accessToken');
+                            final userID = userBox.get('id');
+                            int parkingSpace = spaceList[index];
+                            index++;
+                            print(index);
+                            final postResponse = await http.post(
+                                Uri.parse(baseUrl + 'parkmitra/sessions/add'),
+                                headers: <String, String>{
+                                  'Content-Type':
+                                      'application/json; charset=UTF-8',
+                                  'Authorization': 'Bearer $accesstoken'
+                                },
+                                body: jsonEncode(<String, String>{
+                                  "user": "$userID",
+                                  "vehicle": parkinglotController
+                                      .selectedVehicleId
+                                      .toString(),
+                                  "parking_space": parkingSpace.toString(),
+                                  "entry_time": iso8601string_start + '000Z',
+                                  "exit_time": iso8601string_end + '000Z'
+                                }));
+                            if (postResponse.statusCode == 201) {
+                              writeUserDataToHive();
+                              print(postResponse.body);
+                              print("Parking Spot booked successfully");
+                              Get.snackbar('Success', 'Booking Successful');
+                            }
+                            Get.offAll(() => NavBar());
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
                             child: Text(
                               'Book',
-                              style: TextStyle(fontSize: 18),
-                            )),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20),
+                            ),
+                          ),
+                        ),
                       ))
                     ],
                   ),
