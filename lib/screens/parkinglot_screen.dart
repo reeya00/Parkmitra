@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:parkmitra/model/model.dart';
 import 'package:parkmitra/screens/active_screen.dart';
+import 'package:parkmitra/screens/constants.dart';
 import 'package:parkmitra/screens/nav_bar.dart';
 import 'login.dart';
 import 'package:get/get.dart';
@@ -135,11 +136,11 @@ class ParkinglotScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Container(
                 width: double.infinity,
                 child: Card(
-                  color: Colors.blue.shade100,
+                  color: mutedBlue,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -154,9 +155,9 @@ class ParkinglotScreen extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          SizedBox(width: 15, height: 140),
+                          SizedBox(width: 15, height: 100),
                           Text(
-                            '300 km away',
+                            '300 m away',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 15),
                           ),
@@ -179,7 +180,7 @@ class ParkinglotScreen extends StatelessWidget {
             Expanded(
               flex: 6,
               child: Container(
-                color: Colors.blue.shade100,
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20.0, vertical: 12.0),
@@ -187,14 +188,14 @@ class ParkinglotScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Text(
                         'Book a Spot',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.bold, fontSize: 26),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 40),
                       Text(
                         'Select a Vehicle',
                         style: TextStyle(
@@ -230,6 +231,7 @@ class ParkinglotScreen extends StatelessWidget {
                           )),
                       SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             'Entry Time',
@@ -237,7 +239,7 @@ class ParkinglotScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold, fontSize: 12),
                           ),
                           SizedBox(
-                            width: 182,
+                            width: 130,
                           ),
                           Text(
                             'Exit Time',
@@ -269,7 +271,7 @@ class ParkinglotScreen extends StatelessWidget {
                               }
                             },
                             decoration: InputDecoration(
-                              hintText: 'Enter Entry Time',
+                              hintText: 'Entry Time',
                               border: OutlineInputBorder(),
                               suffixIcon: Icon(Icons.timer),
                             ),
@@ -301,14 +303,14 @@ class ParkinglotScreen extends StatelessWidget {
                               }
                             },
                             decoration: InputDecoration(
-                              hintText: 'Enter Exit Time',
+                              hintText: 'Exit Time',
                               border: OutlineInputBorder(),
                               suffixIcon: Icon(Icons.timer),
                             ),
                           )),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 80),
                       Text(
                         'Time Difference: ${parkinglotController.calcdifference}',
                         style: TextStyle(
@@ -320,11 +322,11 @@ class ParkinglotScreen extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                      SizedBox(height: 90),
-                      Expanded(
-                          child: Container(
+                      SizedBox(height: 80),
+                        Container(
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                         width: 400,
+                        height: 60,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -390,7 +392,7 @@ class ParkinglotScreen extends StatelessWidget {
                               'Book',
                               style: TextStyle(fontSize: 18),
                             )),
-                      ))
+                      )
                     ],
                   ),
                 ),

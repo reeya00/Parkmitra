@@ -172,7 +172,7 @@ class _LocationPageState extends State<LocationPage> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '300 km',
+                      '300 m',
                       style: TextStyle(
                         fontSize: 14,
                         // fontWeight: FontWeight.bold,
