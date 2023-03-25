@@ -115,7 +115,7 @@ class _LocationPageState extends State<LocationPage> {
     print(_currentPosition);
   }
 
-  void showBottomSheet() {
+  void showBottomSheet(String locationName, String location, String price) {
     Get.bottomSheet(
       Container(
         decoration: BoxDecoration(
@@ -141,14 +141,14 @@ class _LocationPageState extends State<LocationPage> {
             SizedBox(height: 20),
             ListTile(
               title: Text(
-                'Labim Mall',
+                locationName,
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               subtitle: Text(
-                'Pulchowk, Lalitpur',
+                location,
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -193,7 +193,7 @@ class _LocationPageState extends State<LocationPage> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Rs. 10 per hour',
+                      'Rs. $price per hour',
                       style: TextStyle(
                         fontSize: 14,
                         // fontWeight: FontWeight.bold,
@@ -272,9 +272,686 @@ class _LocationPageState extends State<LocationPage> {
                               points);
                           //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
                         }
-                        showBottomSheet();
+                        showBottomSheet('Labim Mall', 'Patan', '10');
                       }),
                 ),
+                Marker(
+                  point: LatLng(27.689787, 85.319058),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(27.689787, 85.319058);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.689787,
+                              85.319058,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Norvic Hospital', 'Thapathali, Kathmandu', '10');
+                      }),
+                ),
+                Marker(
+                  point: LatLng(27.673732729937345, 85.31086292236026),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.673732729937345, 85.31086292236026);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.673732729937345,
+                              85.31086292236026,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Central Zoo', 'Jawalakhel, Lalitpur', '10');
+                      }),
+                ),
+                //DobhiGHat
+                Marker(
+                  point: LatLng(27.67478808012014, 85.30104276430856),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.67478808012014, 85.30104276430856);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.67478808012014,
+                              85.30104276430856,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('Nepal College of Management',
+                            'Dhobighat, Lalitpur', '10');
+                      }),
+                ),
+                //EkantaKuna
+                Marker(
+                  point: LatLng(27.666197956762637, 85.30989522187775),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.666197956762637, 85.30989522187775);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.666197956762637,
+                              85.30989522187775,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Newa Food Land', 'Ekantakuna, Lalitpur', '10');
+                      }),
+                ),
+                //Nara Park
+                Marker(
+                  point: LatLng(27.667417984012754, 85.31636097146453),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.667417984012754, 85.31636097146453);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.667417984012754,
+                              85.31636097146453,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('Nara Park', 'Kusunti, Lalitpur', '10');
+                      }),
+                ),
+                //Patan Hospital
+                Marker(
+                  point: LatLng(27.66836304410175, 85.32065925526598),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.66836304410175, 85.32065925526598);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.66836304410175,
+                              85.32065925526598,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Patan Hospital', 'Itapukhu, Lalitpur ', '10');
+                      }),
+                ),
+
+                //Nirvana College
+                Marker(
+                  point: LatLng(27.66707485918133, 85.32468449278204),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.66707485918133, 85.32468449278204);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.66707485918133,
+                              85.32468449278204,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Nirvana College', ' Itapukhu, Lalitpur ', '10');
+                      }),
+                ),
+
+                //Premier International School
+                Marker(
+                  point: LatLng(27.65316606762367, 85.3287041375297),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.65316606762367, 85.3287041375297);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.65316606762367,
+                              85.3287041375297,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('Premier International School',
+                            'Khumaltar, Lalitpur', '10');
+                      }),
+                ),
+                //Mahalaxmistan
+                Marker(
+                  point: LatLng(27.662802422551138, 85.31893113931176),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.662802422551138, 85.31893113931176);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.662802422551138,
+                              85.31893113931176,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Mahalaxmistan Temple', 'Kusunti, Lalitpur', '10');
+                      }),
+                ),
+                //Gwarko Mall
+                Marker(
+                  point: LatLng(27.666890352070283, 85.33311629990231),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.666890352070283, 85.33311629990231);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.666890352070283,
+                              85.33311629990231,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('Gwarko Mall',
+                            'Gwarko-Lamatar Road, Lalitpur', '10');
+                      }),
+                ),
+                //Big Mark
+                Marker(
+                  point: LatLng(27.672722527080502, 85.33349116061454),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.672722527080502, 85.33349116061454);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.672722527080502,
+                              85.33349116061454,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Big Mart', 'Bhola Dhoka, Lalitpur', '10');
+                      }),
+                ),
+
+                //UNESCO
+                Marker(
+                  point: LatLng(27.685214747425988, 85.30590228832882),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.685214747425988, 85.30590228832882);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.685214747425988,
+                              85.30590228832882,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('UNESCO', 'Sanepa, Lalitpur', '10');
+                      }),
+                ),
+
+                //BHatBHateni
+                Marker(
+                  point: LatLng(27.675011135835042, 85.34491431146905),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.675011135835042, 85.34491431146905);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.675011135835042,
+                              85.34491431146905,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'BhatBhateni', 'KotDevi, Kathmandu', '10');
+                      }),
+                ),
+
+                //Kantipur Hospital
+                Marker(
+                  point: LatLng(27.685806059751187, 85.3449327517264),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.685806059751187, 85.3449327517264);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.685806059751187,
+                              85.3449327517264,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('Kantipur Hospital',
+                            'Subidhanagar, Kathmandu ', '20');
+                      }),
+                ),
+
+                //Big Maurder
+                Marker(
+                  point: LatLng(27.678137968884517, 85.33924521695906),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.678137968884517, 85.33924521695906);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.678137968884517,
+                              85.33924521695906,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Big Mart', 'Subidhanagar, Kathmandu', '10');
+                      }),
+                ),
+
+                //trolly Bus Station
+                Marker(
+                  point: LatLng(27.68792245767365, 85.33890943029934),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.68792245767365, 85.33890943029934);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.68792245767365,
+                              85.33890943029934,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('Trolly Bus Station',
+                            'Naya Baneshwar, Kathmandu ', '25');
+                      }),
+                ),
+
+                //Oliz Store
+                Marker(
+                  point: LatLng(27.69003295148972, 85.32635710133425),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.69003295148972, 85.32635710133425);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.69003295148972,
+                              85.32635710133425,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Oliz Store', 'Buddha Nagar, Kathmandu ', '15');
+                      }),
+                ),
+
+                //BhatBhateni
+                Marker(
+                  point: LatLng(27.6930809381547, 85.32830787532528),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.6930809381547, 85.32830787532528);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.6771,
+                              85.3171,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'BhatBhateni', ' Buddha Nagar, Kathmandu', '10');
+                      }),
+                ),
+
+                //United World Trade Centre
+                Marker(
+                  point: LatLng(27.6941223099765, 85.31361261376355),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.6941223099765, 85.31361261376355);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.6941223099765,
+                              85.31361261376355,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'UWTO', 'Tripureshwar, Kathmandu ', '10');
+                      }),
+                ),
+
+                //Cvil Mall
+                Marker(
+                  point: LatLng(27.69940040683577, 85.31264218788753),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.69940040683577, 85.31264218788753);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.69940040683577,
+                              85.31264218788753,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Civil Mall', 'Tripureshwar, Kathmandu', '20');
+                      }),
+                ),
+
+                //Kathmandu Fun Pork
+                Marker(
+                  point: LatLng(27.700979320099403, 85.31960066109141),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.700979320099403, 85.31960066109141);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.700979320099403,
+                              85.31960066109141,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet(
+                            'Kathmandu Fun Park', 'Baghbazar, Kathmandu', '15');
+                      }),
+                ),
+
+                //Agro to the culture
+                Marker(
+                  point: LatLng(27.696500168013205, 85.32080450246708),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.696500168013205, 85.32080450246708);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.696500168013205,
+                              85.32080450246708,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);
+                        }
+                        showBottomSheet('Agricultural development bank Ltd',
+                            'Thapathali, Kathmandu', '10');
+                      }),
+                ),
+
+                //Kathway HOstel
+                Marker(
+                  point: LatLng(27.700365670586148, 85.35140989236685),
+                  width: 80,
+                  height: 80,
+                  builder: (context) => InkWell(
+                      child: Icon(
+                        AppIcons.asset_8,
+                        size: 35,
+                        color: Colors.blueAccent,
+                        opticalSize: 40,
+                      ),
+                      onTap: () {
+                        print("markertapped");
+                        writeParkinglotDataToHive(
+                            27.700365670586148, 85.35140989236685);
+                        if (_currentPosition != null) {
+                          getDirections(
+                              _currentPosition?.latitude ?? 0,
+                              _currentPosition?.longitude ?? 0,
+                              27.700365670586148,
+                              85.35140989236685,
+                              points);
+                          //getDirections(27.6994,85.3129, 27.6771, 85.3171,points);Gairi Gaun, Kathmandu'
+                        }
+                        showBottomSheet('Kathway Hostel & Homestay',
+                            'Gairi Gaun, Kathmandu', '30');
+                      }),
+                ),
+
                 Marker(
                   point: LatLng(_currentPosition?.latitude ?? 0,
                       _currentPosition?.longitude ?? 0),
