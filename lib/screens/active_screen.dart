@@ -17,9 +17,9 @@ class ActiveScreenController extends GetxController {
 
   void fetchSessionData() async {
     final userBox = Hive.box('userBox');
-    spaceCode.value = userBox.get('session').last['id'].toString() ?? 'N/A';
+    spaceCode.value = userBox.get('session').last['id'].toString();
     userBox.watch(key: 'session').listen((event) {
-      spaceCode.value = event.value.last['id'].toString() ?? 'N/A';
+      spaceCode.value = event.value.last['id'].toString();
       print('sessionscreen spaceval');
       print(spaceCode.value);
     });
@@ -53,17 +53,7 @@ class ActiveScreen extends StatelessWidget {
             // padding: EdgeInsets.all(10),
             child: IconButton(
               onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 200,
-                      child: Center(
-                        child: Text('This is a modal sheet.'),
-                      ),
-                    );
-                  },
-                );
+                Get.to(() => QRCodeScannerEntry());
               },
               icon: Icon(
                 Icons.where_to_vote,
@@ -143,7 +133,7 @@ class ActiveScreen extends StatelessWidget {
                                     child: MaterialButton(
                                       onPressed: () {
                                         // Handle "Pay Now" button press
-                                        Get.to(() => QRCodeScanner());
+                                        Get.to(() => QRCodeScannerExit());
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
