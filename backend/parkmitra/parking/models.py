@@ -36,7 +36,7 @@ class ParkingLot(models.Model):
 
 class ParkingSpace(models.Model):
     parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, blank=True, null=True, related_name="spaces")
-    is_occupied = models.BooleanField()
+    is_occupied = models.BooleanField(default=False)
     occupied_by = models.ForeignKey(user, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def check_occupancy(self):
@@ -48,6 +48,3 @@ class ParkingSession(models.Model):
     parking_space = models.ForeignKey(ParkingSpace, on_delete=models.CASCADE, blank=False, null=True, related_name="sessions")
     entry_time = models.DateTimeField()
     exit_time = models.DateTimeField(null=True, blank=True)
-
-    def calculate_costs(self):
-        pass

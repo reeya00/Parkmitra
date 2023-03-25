@@ -185,6 +185,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.5"
+  esewa_pnp:
+    dependency: "direct main"
+    description:
+      name: esewa_pnp
+      sha256: "7379b552066627144523aca1ebf7667f3407f4c928a50f06fd16194a8b13f388"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:

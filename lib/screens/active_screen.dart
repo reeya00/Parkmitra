@@ -48,30 +48,31 @@ class ActiveScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: primaryBlue,
         title: const Text('Active Sessions'),
-        actions: [
-          // Container(
-          //   margin: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
-          //   decoration: BoxDecoration(
-          //     color: Colors.white24,
-          //     borderRadius: BorderRadius.circular(20),
-          //   ),
-          //   child: TextButton(
-          //     onPressed: () {
-          //       showModalBottomSheet(
-          //         context: context,
-          //         builder: (BuildContext context) {
-          //           return Container(
-          //             height: 200,
-          //             child: Center(
-          //               child: Text('This is a modal sheet.'),
-          //             ),
-          //           );
-          //         },
-          //       );
-          //     },
-          //     child: Text('Status', style: TextStyle(color: Colors.white)),
-          //   ),
-          // ),
+        actions: <Widget>[
+          Container(
+            // padding: EdgeInsets.all(10),
+            child: IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 200,
+                      child: Center(
+                        child: Text('This is a modal sheet.'),
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.where_to_vote,
+                color: Colors.white,
+                size: 35,
+              ),
+              // child: Text('Verify', style: TextStyle(color: Colors.white)),
+            ),
+          ),
         ],
       ),
       body: Column(
@@ -87,64 +88,76 @@ class ActiveScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final session = sessionRx[index];
                     final titleText = session['parking_space'].toString();
-                    final subtitleText1 = session['entry_time'].substring(11,16);
-                    final subtitleText2 = session['exit_time'].substring(11,16);
+                    final subtitleText1 =
+                        session['entry_time'].substring(11, 16);
+                    final subtitleText2 =
+                        session['exit_time'].substring(11, 16);
 
                     return Card(
-                      margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                Expanded(
-                                  child:ListTile(
-                      title: Text(
-                        'Space Code: $titleText',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      
-                      subtitle: Row(
-                        children: [
-                          RichText(
-                          text: TextSpan(
-                            style: DefaultTextStyle.of(context).style,
-                            children: <TextSpan>[
-                              TextSpan(text: 'Entry: ', ),
-                              TextSpan(text: subtitleText1, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.5))),
-                              TextSpan(text: '\t\t\t\tExit: '),
-                              TextSpan(text: subtitleText2, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.5))),
-                            ],
-                          ),
-                        ),
-                        ],
-                      )
-                      
-
-                    ),),
-                    Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: Material(
-                                elevation: 5.0,
-                                borderRadius: BorderRadius.circular(30.0),
-                                color: primaryBlue,
-                                child:MaterialButton(
-                                  onPressed: () {
-                                  // Handle "Pay Now" button press
-                                  Get.to(() => QRCodeScanner());
-                                },
-                                child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                                child: Text(
-                                  'Pay Now',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold, color: Colors.white),
-                                ),
-                              ),
-                                 )
-                                 )
-                              )
-                            
-                    ])]));
+                        margin:
+                            const EdgeInsets.only(right: 20, left: 20, top: 20),
+                        child: Column(children: <Widget>[
+                          Row(children: [
+                            Expanded(
+                              child: ListTile(
+                                  title: Text(
+                                    'Space Code: $titleText',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Row(
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: 'Entry: ',
+                                            ),
+                                            TextSpan(
+                                                text: subtitleText1,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black
+                                                        .withOpacity(0.5))),
+                                            TextSpan(text: '\t\t\t\tExit: '),
+                                            TextSpan(
+                                                text: subtitleText2,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black
+                                                        .withOpacity(0.5))),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: Material(
+                                    elevation: 5.0,
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    color: primaryBlue,
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        // Handle "Pay Now" button press
+                                        Get.to(() => QRCodeScanner());
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4, vertical: 4),
+                                        child: Text(
+                                          'Pay Now',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    )))
+                          ])
+                        ]));
                   },
                 );
               },
