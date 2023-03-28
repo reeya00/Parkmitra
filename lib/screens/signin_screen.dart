@@ -150,7 +150,7 @@ class SigninScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   loginbutton,
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   TextButton(
                       onPressed: () => {Get.to(() => LoginScree())},
